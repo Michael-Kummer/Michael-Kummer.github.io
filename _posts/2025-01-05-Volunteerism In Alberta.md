@@ -4,14 +4,7 @@ title: WIP Volunteerism In Alberta
 date: '2024-12-31 16:22:20 -0700'
 ---
 
-
-
-Test stuff
-
-
-![First image]({{'/assets/postImages/post1/Untitled2.jpg' | relative_url}})
-
-# WIP
+# Currently a WIP. Background and discussion are complete
 
 ##### Background
 <p>The nonprofit sector of Alberta's experiencing new trends and exacerbation of old ones. Currently we're seeing declines in the number of Canadians making charitable donations, that some Canadians are feeling more disconnected and not giving money or time, and increased service usage (Giving survey, 2024). Given these new changes there needs to be adaptation and new techniques used by nonprofits to engage communities.</p>
@@ -95,3 +88,4 @@ Since we are working with solely categorical and binned data we are limited in o
 
 
 
+![First image]({{'/assets/postImages/post1/Untitled2.jpg' | relative_url}})
