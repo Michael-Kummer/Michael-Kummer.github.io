@@ -71,15 +71,15 @@ Currently we're working on outdated information based on the Giving Survey that 
 
 In cleaning the data I replaced the questions with the guidebook, then I simplified the questions. Notably right after this we can see the following for how much time is being spent volunteering:
 
-
-![Hours Volunteering](TestHours.png)
-
+##### Test Hours Image
 
 
 ##### Challenges
 
 For perceived challenges there are 5 main ones
 
+
+## Challenges image
 
 ##### Possible Improvements
 
