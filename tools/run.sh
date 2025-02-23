@@ -4,7 +4,7 @@
 
 prod=false
 command="bundle exec jekyll s -l"
-host="127.0.0.1"
+host="192.168.1.75:4000"
 
 help() {
   echo "Usage:"

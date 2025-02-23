@@ -4,14 +4,10 @@ title: WIP Volunteerism In Alberta
 date: '2024-12-31 16:22:20 -0700'
 ---
 
-# Currently a WIP. Background and discussion are complete
-
 ##### Background
 <p>The nonprofit sector of Alberta's experiencing new trends and exacerbation of old ones. Currently we're seeing declines in the number of Canadians making charitable donations, that some Canadians are feeling more disconnected and not giving money or time, and increased service usage (Giving survey, 2024). Given these new changes there needs to be adaptation and new techniques used by nonprofits to engage communities.</p>
 Previously recruiting volunteers entailed a rough strategy consisting of:
 Cold Recruitment -> Training and integration -> Word-of-mouth recruitment
-
-Given that cold recruitment is more difficult, the negative effects on nonprofits are multiplied.
 
 
 From my own personal experience i've found the following to be generally true:
@@ -32,52 +28,62 @@ We know from the Giving Report that people volunteer when they feel connected an
 
 The pandemic has caused a lot of isolation and potentially even decline. If there's documented analysis we can make the following two hypothesis where one is based in the recent term, and one is focused on long term effects:
 1) Post-Pandemic will show, we can expect to see a decrease in volunteerism due to isolation and we can see an increase in intensity in volunteering due to the intentionality behind volunteering for the community.
-To make 1) disprovable, we will try to look through the most recent data, but we will fully understand this effect once the most recent Giving, Volunteering and Participating (GVP) survey based on 2024 data is released. At best, we can predict the falsifiability of this statement until the survey is released
+To make 1) disprovable, we will try to look through the most recent data, but we will fully understand this effect once the most recent Giving, Volunteering and Participating (GVP) survey based on 2024 data is released. At best, we can predict the falsifiability of this statement until the survey is released.
 
 1) Economically, we can potentially see a similar effect. Given Alberta is a resource economy definitionally it will experience large booms and large busts that is pegged directly to the value of resources. Potentially in these bust cycles we can see the same effects.
-For 2) to be disprovable we can look at the data taken from 2009 and 2015 - 2016 during two Alberta recessions in the 21st century. Here we can find a more direct correlation.
-
-##### Notes:
-Your first hypothesis addresses an important paradox in post-pandemic volunteerism that the data hints at but hasn't fully captured yet. The AB Gov report and Philanthropist article both suggest this tension between isolation and intentionality. Here's how we might sharpen the hypothesis:
-
-Hypothesis 1 (Isolation-Intensity Paradox): "Post-pandemic volunteerism will show two simultaneous but opposing trends: decreased overall participation due to disrupted social networks, but increased hours/commitment from those who do volunteer due to heightened awareness of community needs."
-
-This is theoretically grounded because:
-
-- The Giving Report shows declining social connections correlate with reduced volunteering
-- The shift in gender distribution (50/50 to 36/64) suggests fundamental changes in who volunteers
-- The "same ten people" phenomenon in rural communities indicates intensification among committed volunteers
-
-Your second hypothesis about economic cycles is particularly relevant for Alberta. I'd suggest framing it this way:
-
-Hypothesis 2 (Resource Economy Volunteer Cycle): "Volunteer patterns in resource-dependent economies follow a counter-cyclical pattern, with formal volunteering decreasing during economic downturns while informal community support increases."
-
-This builds on:
-
-- Historical data from previous resource busts
-- The documented increase in service demands during economic downturns
-- The shift between formal and informal volunteering noted in the AB Gov report
+For 2) to be disprovable we can look at data on Alberta's economic dashboard for 2022/23. We do not necessarily have anything to compare our survey data to until GSV 2024 is released, but we might be able to see some broad trends.
 
 
 ## Methods
 Currently we're working on outdated information based on the Giving Survey that is pre-covid. The most recent raw data we have is based on the Government of Alberta's 2023 Online survey. This survey is extremely broad, but contains sections based on volunteerism and we have around 600 responses for volunteer-related items so it is currently the best we have.
 
-In cleaning the data I replaced the questions with the guidebook, then I simplified the questions. Notably right after this we can see the following for how much time is being spent volunteering:
+In cleaning the data I replaced the questions with the guidebook, then I simplified the questions. This was done using Pandas and PlotNine, though PlotNine can easily be substituted for Matplotlib or any other python plotting program.
 
-##### Test Hours Image
+After importing the data we can use the questions to create a dictionary and substitute our codes. We can also create simplified names for our questions.
+
+```
+rename_dict = dict(zip(
+    onlineQuestions['Variable'],  # Original names
+    onlineQuestions['Label'].str.split('--').str[1].str.strip()  # Clean labels
+))
+
+renamedOnline22 = onlineRawData.rename(columns = rename_dict)
+```
 
 
-##### Challenges
-
-For perceived challenges there are 5 main ones
+Many responses had to be turned into np.na to not interfere with the data. Any skipped, empty, or unknown responses were turned into N/A.
 
 
-## Challenges image
+#### Who's Volunteering?
+
+Notably right after this we can see the following for how much time is being spent volunteering:
+
+![[Hours Volunteered.png]]({{'/assets/postImages/post1/Hours-Volunteered.png' | relative_url}})
+
+
+##### Where are we going wrong?
+
+Interestingly enough opportunities to improve ones skillset is not necessarily appealing to most volunteers, especially senior volunteers.
+
+
+![[Skillset.png]]({{'/assets/postImages/post1/Skillset.png' | relative_url}})
+
+
+
+In terms of volunteer appreciation we see that increasing levels of volunteer appreciation might not have the impact most coordinators believe it will. This effect is more pronounced in volunteers who are older too.
+
+![[Volunteer Appreciation.png]]({{'/assets/postImages/post1/Volunteer-Appreciation.png' | relative_url}})
+
+
 
 ##### Possible Improvements
 
-Interestingly enough for possible improvements it seems as senior volunteers are not entirely engaged by volunteer appreciation awards. Volunteering for meaning is a reward in itself to some.
+Interestingly enough for possible improvements it seems as senior volunteers are not entirely engaged by volunteer appreciation and are not looking for any direct benefit. This is most likely due to seniors volunteering for the sake of helping more than anything else. Volunteering is a way to talk to others, stay engaged, and get out of the house. 
 
+Since seniors are not necessarily able or willing to drive out to locations to volunteer, they are limited to areas close by. Given this coordinators should focus on engaging seniors who are nearby. Those senior volunteers who are nearby also most likely know other seniors meaning we can easily compound our efforts through word-of-mouth recruitment
+
+
+### WIP
 
 
 
@@ -88,4 +94,3 @@ Since we are working with solely categorical and binned data we are limited in o
 
 
 
-![First image]({{'/assets/postImages/post1/Untitled2.jpg' | relative_url}})
