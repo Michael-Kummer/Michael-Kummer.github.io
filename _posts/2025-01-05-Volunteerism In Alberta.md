@@ -55,13 +55,43 @@ renamedOnline22 = onlineRawData.rename(columns = rename_dict)
 Many responses had to be turned into np.na so as not to interfere with the data. Any skipped, empty, or unknown responses were turned into N/A.
 
 I used value_counts for the age ranges to see who exactly answered the survey:
-What age range do you fall into?
-25 to 34       336
-55 to 64       325
-65 or older    321
-35 to 44       268
-45 to 54       247
-18 to 24        67
+
+
+<h3>What age range do you fall into?</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Age Range</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>25 to 34</td>
+      <td>336</td>
+    </tr>
+    <tr>
+      <td>55 to 64</td>
+      <td>325</td>
+    </tr>
+    <tr>
+      <td>65 or older</td>
+      <td>321</td>
+    </tr>
+    <tr>
+      <td>35 to 44</td>
+      <td>268</td>
+    </tr>
+    <tr>
+      <td>45 to 54</td>
+      <td>247</td>
+    </tr>
+    <tr>
+      <td>18 to 24</td>
+      <td>67</td>
+    </tr>
+  </tbody>
+</table>
 
 Given that we have the fewest responses from the 18- —to 24-year-old group, we will expect all of their bars to fall short by a large margin.
 
@@ -91,13 +121,12 @@ In terms of volunteer appreciation, we see that increasing levels of appreciatio
 
 #### Challenges
 
-The most commonly selected challenge to volunteering was:
-
-Lack of available time with 410 respondents.
-Required too much or too little of my time with 186 respondents.
-Lack of flexible scheduling with 139 respondents.
-Unclear or unreasonable expectations with 105 respondents.
-
+| The most commonly selected challenge to volunteering was:          |                 |
+|--------------------------------------------------------------------|-----------------|
+| Lack of available time                                             | 410 respondents |
+| Required too much or too little of my time                         | 186 respondents |
+| Lack of flexible scheduling                                        | 139 respondents |
+| Unclear or unreasonable expectations                               | 105 respondents |
 
 All of these responses are to be expected. Volunteering requires substantial time, even if it is for a few hours a week. Scheduling was also a common issue I saw. There are only a certain number of shifts available, and often, to receive an afternoon or weekend shift, you might have to start on a weekday during the day shift.
 
