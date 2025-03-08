@@ -1,147 +1,174 @@
 ---
 layout: post
-title: WIP Volunteerism In Alberta
+title: Senior vs Non-Senior Volunteerism In Alberta
 date: '2024-12-31 16:22:20 -0700'
 ---
 
+## Executive Summary
 
+This analysis, based on the Government of Alberta's 2023 Online survey, delves into age-based differences in volunteer engagement, motivations, and barriers between seniors and non-seniors. The findings were used to create strategies for nonprofit organizations to recruit and retain volunteers, with special attention to senior volunteers who contribute disproportionately to the volunteer workforce.
 
-## Background
-<p>The nonprofit sector of Alberta is experiencing new trends and, with older trends being exacerbated. Currently, we're seeing declines in the number of Canadians making charitable donations; some Canadians are feeling more disconnected and not giving money or time, and service usage is increasing (Giving survey, 2024). Given these new changes, there needs to be adaptation and new techniques nonprofits use to engage communities.</p>
+## Current Landscapes & Challenges
 
-Previously, recruiting volunteers entailed a rough strategy consisting of cold recruitment, training and integration of volunteers; then, those volunteers would assist in recruitment through word-of-mouth. Given that some reports say that individuals are volunteering less post-COVID, organizations are losing out on a crucial recruitment method.
+The nonprofit sector of Alberta is experiencing a shift post-COVID, making the role of volunteers increasingly essential. Currently, we are seeing declines in the number of Canadians making charitable donations; some Canadians are feeling more disconnected and not donating money or time, all while service usage is at a record high (Canada Helps Giving Survey, 2024). Given these new changes, there needs to be adaptation and new techniques nonprofits use to engage communities.
 
-From my own personal experience, I've found the following to be generally true:
-- A majority of the volunteer work is done by a minority of volunteers who are highly engaged
-- Consistent community engagement is extremely difficult for coordinators. I've noticed most organizations work in phases or campaigns instead of constantly maintaining pressure.
-- Targeting specific populations is better than casting as wide a net as possible.
-	- Ex. leadership groups or certain student groups
+Previously, recruiting volunteers entailed a rough strategy consisting of cold recruitment, training and integration of volunteers; then, those volunteers would assist in recruitment through word-of-mouth. Currently, individuals are volunteering less post-COVID, meaning organizations are losing out on a crucial recruitment method (Giving Survey, 2024).
 
-Currently, the nonprofit sector is facing a variety of changes that each organization can fit into:
-1) They have been receiving decreased donations in past years
-2) They are receiving the same or more in donations from a smaller group of individuals
-
-College-age individuals need little reason or request to begin or try to apply for volunteering. Seniors need genuine outreach to volunteer. Individuals in between might not volunteer unless they have an explicit reason to, as in they truly want to volunteer there or they need professional hours.
-
-
-## Discussion
-From the Giving Report, we know that people volunteer when they feel connected and are able to see direct results—hence why environmental factors were focused upon, as the results are typically not immediate and potentially less tangible. For other organizations not in the environment, the decline in consecutiveness means more isolation for seniors. Since we cannot literally reach out to every senior in isolation, we must go through large community groups and have them distribute volunteering opportunities.
-
-The pandemic has caused a lot of isolation and potentially even decline. If there's documented analysis, we can make the following two hypotheses where one is based on the recent term, and one is focused on long-term effects:
-1) Post-pandemic, we can expect to see a decrease in volunteerism due to isolation and an increase in the intensity of volunteering due to the intentionality behind volunteering for the community.
-To make 1) disprovable, we will try to look through the most recent data. However, we will fully understand this effect once the most recent Giving, Volunteering, and Participating (GVP) survey based on 2024 data is released. At best, we can predict the falsifiability of this statement until the survey is released.
-
-1) Economically, we can potentially see a similar effect. Given that Alberta is a resource economy, it will experience large booms and large busts, which are pegged directly to the value of resources. Potentially, in these bust cycles, we can see the same effects.
-For 2) to be disprovable, we can look at data on Alberta's economic dashboard for 2022/23. We do not necessarily have anything to compare our survey data to until GSV 2024 is released, but we might be able to see some broad trends.
-
+My experience coordinating volunteers has consistently shown that:
+1. A minority of highly engaged volunteers typically perform a substantial amount of volunteer work, but as the Giving Survey warns, these volunteers can burn out.
+2. Maintaining consistent community engagement is challenging for coordinators, leading to campaign-based rather than continuous recruitment efforts.
+3. Targeted outreach to specific demographics yields better results than broad recruitment campaigns.
+4. College-age individuals need little reason or request to begin or try to apply for volunteering.
+5. Seniors require genuine outreach to start volunteering at your organization.
 
 ## Methods
-Currently, we're working on outdated information based on the Giving Survey, which is pre-COVID. The most recent raw data we have is based on the Government of Alberta's 2023 Online survey. This survey is extremely broad but contains sections on volunteerism, and we have around 600 responses for volunteer-related items, so it is currently the best we have.
 
-In cleaning the data, I replaced the questions with the guidebook and simplified them. This was done using Pandas and PlotNine, though PlotNine can easily be substituted for Matplotlib or any other Python plotting program.
+Currently, we are working on outdated information based on the Statistics Canada Survey on Giving, Volunteering and Participating (SVGP), which is pre-COVID (2018). Our most recent raw data is based on the Government of Alberta's 2023 Online survey. This survey contains a lot of irrelevant questions, but contains sections on volunteerism, and we have around 600 responses for volunteer-related items, so it is currently our best source of raw data on Volunteerism in Alberta.
 
-After importing the data, we can use the questions to create a dictionary and substitute our codes. We can also create simplified names for our questions.
+Data preparation involved:
+- Removing unrelated questions and standardizing related questions.
+- Ensuring all "Refused to Respond"'s were changed to NA.
+- Python (Pandas and PlotNine) are used for analysis and visualization.
 
-```
-rename_dict = dict(zip(
-    onlineQuestions['Variable'],  # Original names
-    onlineQuestions['Label'].str.split('--').str[1].str.strip()  # Clean labels
-))
+Our hypothesis for this analysis is whether there is a substantial difference between the challenges faced by senior and non-senior volunteers.
 
-renamedOnline22 = onlineRawData.rename(columns = rename_dict)
-```
+### Demographics of Survey Respondents
 
+#### Age Distribution Table
 
-Many responses had to be turned into np.na so as not to interfere with the data. Any skipped, empty, or unknown responses were turned into N/A.
+| Age Range   | Count    | Percentage |
+| ----------- | -------- | ---------- |
+| 18 to 24    | 67       | 4.3%       |
+| 25 to 34    | 336      | 21.5%      |
+| 35 to 44    | 268      | 17.1%      |
+| 45 to 54    | 247      | 15.8%      |
+| 55 to 64    | 325      | 20.8%      |
+| 65 or older | 321      | 20.5%      |
+| **Total**   | **1564** | **100%**   |
 
-I used value_counts for the age ranges to see who exactly answered the survey:
+*Note: The limited representation of 18-24-year-olds (4.3%) restricts our ability to draw strong conclusions about this demographic.*
 
+#### Education Level Table
 
-<h3>What age range do you fall into?</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Age Range</th>
-      <th>Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>25 to 34</td>
-      <td>336</td>
-    </tr>
-    <tr>
-      <td>55 to 64</td>
-      <td>325</td>
-    </tr>
-    <tr>
-      <td>65 or older</td>
-      <td>321</td>
-    </tr>
-    <tr>
-      <td>35 to 44</td>
-      <td>268</td>
-    </tr>
-    <tr>
-      <td>45 to 54</td>
-      <td>247</td>
-    </tr>
-    <tr>
-      <td>18 to 24</td>
-      <td>67</td>
-    </tr>
-  </tbody>
-</table>
+| Education Level         | Count | Percentage |
+| ----------------------- | ----- | ---------- |
+| University graduate     | 689   | 44.1%      |
+| College/trades graduate | 367   | 23.5%      |
+| Some college/trades     | 220   | 14.1%      |
+| High school graduate    | 134   | 8.6%       |
+| Some university         | 95    | 6.1%       |
+| Less than high school   | 33    | 2.1%       |
+| Not reported            | 26    | 1.7%       |
 
-Given that we have the fewest responses from the 18- —to 24-year-old group, we will expect all of their bars to fall short by a large margin.
+#### Employment Status Table
 
-## Results
-#### Who's Volunteering?
+| Employment Status  | Count | Percentage |
+| ------------------ | ----- | ---------- |
+| Working full-time  | 750   | 48.0%      |
+| Retired            | 333   | 21.3%      |
+| Self-employed      | 159   | 10.2%      |
+| Working part-time  | 135   | 8.6%       |
+| Unemployed         | 88    | 5.6%       |
+| Student            | 37    | 2.4%       |
+| Other/Not reported | 62    | 4.0%       |
 
-Notably, right after this, we can see the following for how much time is being spent volunteering:
+#### Limitations
+- Given that we have the fewest responses from the 18—to 24-year-old group, we will have a strong sampling bias against all of their responses, so we will be unable to draw any conclusions.
+	- This is solved by creating two bins: Seniors and Non-Seniors.
+- We only have bins to work with here, so we cannot necessarily create a regression for all of the values. Our best case scenario would be if we had the exact ages and hours volunteered, then we could see precisely how each response affects the rate of volunteering.
 
+## Key Findings
+
+##### Figure 1: Who is Volunteering?
 ![[Hours Volunteered.png]]({{'/assets/postImages/post1/Hours-Volunteered.png' | relative_url}})
+*Note: the 18-24 range cannot be used to predict or determine anything about their volunteering rates*
+As expected, senior individuals volunteer the most hours per month. The older an individual becomes, the longer they will spend volunteering. Younger groups, such as 25 to 34-year-olds, volunteer the fewest hours per month, which is to be expected as individuals under 55 will have less time than those who are retired.
 
-As expected, senior individuals volunteer the most and work more weekly hours. Interestingly, the 18- to 24-year-old range volunteers less than any other range by far. Given that it's essential for younger individuals to volunteer for some academic programs, we would expect more to volunteer. Potentially, those who are volunteering and pursuing rigorous routes would not typically complete surveys, or the volunteer hours are unevenly distributed. Since fewer respondents are in the 18-—to 24-year-old category, we should expect to see a line a 1/4th to a 1/6th the size of other age groups. Even considering this, we're still seeing less than we would expect. This is potentially a key point to consider when the new Canada Giving Survey is released.
+##### Figure 2: Do Potential Volunteers Value Skill Development?
+![[skill_development_heatmap.png]]({{'/assets/postImages/post1/skill_development_heatmap.png' | relative_url}})
+In the past, I have found younger individuals to want to volunteer at places they would eventually like to work. These younger individuals also want more opportunities to grow their respective skill sets. Individuals under 55 align with this experience, as most would see increased appeal through skill-focused volunteering. 
 
-##### Where are we going wrong?
+##### Figure 3: Volunteer Appreciation Appeal by Age Group (%)
+![[recognition_heatmap 1.png]]({{'/assets/postImages/post1/recognition_heatmap 1.png' | relative_url}})
+In terms of volunteer appreciation, increasing levels of appreciation might not have the impact most coordinators believe it will on a subsection of volunteers. Since the distribution seems relatively even across most of the responses, volunteer appreciation is still important, but it does not positively affect all volunteers, especially older individuals.
 
-Interestingly, opportunities to improve one's skillset are not necessarily appealing to most volunteers, especially seniors.
+## Statistical Analysis: Seniors vs. Non-Seniors
 
+Two groups were chosen from this survey: seniors and non-seniors. Since individuals typically retire partway through the 55 - 64 age group, it is beneficial to include that entire age group in the senior/retired persons category.
+###### Tips:
+- P-value: Describes the probability that we would see these results under the null hypothesis. So here, it describes whether we'd see the Senior vs. Non-Senior type of responses in the total group of volunteers.
+- Chi-squared: Measures variation between two unrelated groups and the result. Here, we use it to determine whether there are large variations between the two groups. We do not have random sampling, so we shouldn't rely on it too much.
+- Asterisk (\*): Shorthand for denoting levels of significance.
+	- NS: $P \gt 0.05$ (Not Significant)
+	- "\*": $P \le 0.05$
+	- "\*\*": $P \le 0.01$
+	- "\*\*\*" $P \le 0.001$ (Very Significant)
 
-![[Skillset.png]]({{'/assets/postImages/post1/Skillset.png' | relative_url}})
+### Top Challenges by Age Group
 
+| Challenge                           | Seniors (%) | Non-Seniors (%) | Difference | p-value |
+| ----------------------------------- | ----------- | --------------- | ---------- | ------- |
+| Lack of available time              | 19.5%       | 42.3%           | -22.8%     | <0.0001 |
+| Concerns about Age                  | 16.1%       | 4.1%            | +12.0%     | <0.0001 |
+| No one asked                        | 16.0%       | 28.4%           | -12.4%     | <0.0001 |
+| Finding volunteer opportunities     | 14.1%       | 23.3%           | -9.2%      | <0.0001 |
+| Lack of flexible scheduling         | 6.3%        | 14.3%           | -8.0%      | 0.0001  |
+| Location of volunteering            | 9.4%        | 15.7%           | -6.3%      | 0.0011  |
+| Required too much/little time       | 9.0%        | 15.6%           | -6.6%      | 0.0021  |
+| Did not accommodate groups/families | 3.7%        | 8.2%            | -4.5%      | 0.0037  |
 
-This effect is more pronounced in older volunteers. In the past, I have personally found younger individuals to want to volunteer at places that they would eventually like to work at. These younger individuals also want more opportunities to grow their respective skillsets. The 18-—to 24-year-old category seems to fall in line with this experience, as most of them would see some amount of increased appeal through this. 
+*Note: % relates to % of the age group that states that the challenge affects them. All of the results in the table are statistically significant. This significance relates to whether there is a difference between senior and non-senior answers to each challenge.*
 
-![[Volunteer Appreciation.png]]({{'/assets/postImages/post1/Volunteer-Appreciation.png' | relative_url}})
+In almost all categories, senior individuals have fewer challenges than non-seniors; age is the only one where this is flipped. Volunteer organizations only have control over some of these factors, such as how they advertise. However, others, such as lack of available time, might be impractical or impossible to assist with.
 
-In terms of volunteer appreciation, we see that increasing levels of appreciation might not have the impact most coordinators believe it will. Since the distribution seems relatively even across all of the responses, volunteer appreciation is still important, but it does not have a completely positive effect on all volunteers.
+### What is Appealing to Volunteers
 
+| Appeal Factor                                           | Seniors (%) | Non-Seniors (%) | Difference | Chi-Square | p-value | Significance |
+| ------------------------------------------------------- | ----------- | --------------- | ---------- | ---------- | ------- | ------------ |
+| Access to flexible scheduling opportunities             | 72.3%       | 84.9%           | -12.6%     | 24.86      | <0.001  | ***          |
+| Access to skill-matching opportunities                  | 63.8%       | 79.2%           | -15.4%     | 30.21      | <0.001  | ***          |
+| Organizations supporting different ways of volunteering | 69.4%       | 77.3%           | -7.9%      | 8.63       | 0.003   | **           |
+| Organizations supporting group/family volunteering      | 59.7%       | 72.1%           | -12.4%     | 17.32      | <0.001  | ***          |
+| Organizations that regularly recognize volunteers       | 68.7%       | 74.1%           | -5.4%      | 3.86       | 0.049   | *            |
+| Organizations that are welcoming and inclusive          | 81.2%       | 83.6%           | -2.4%      | 1.05       | 0.306   | NS           |
+| Organizations that understand community needs           | 79.4%       | 82.1%           | -2.7%      | 1.21       | 0.271   | NS           |
+| Access to technology training opportunities             | 58.9%       | 65.7%           | -6.8%      | 5.13       | 0.024   | *            |
 
-#### Challenges
+*Note: Significance relates to whether there is a difference between senior and non-senior answers to each challenge. Anything above neutral was combined, and anything below neutral was combined.*
 
-| The most commonly selected challenge to volunteering was:          |                 |
-|--------------------------------------------------------------------|-----------------|
-| Lack of available time                                             | 410 respondents |
-| Required too much or too little of my time                         | 186 respondents |
-| Lack of flexible scheduling                                        | 139 respondents |
-| Unclear or unreasonable expectations                               | 105 respondents |
+The differences between the desire for skilled positions with flexible scheduling and the necessity for group or family-oriented volunteering are noteworthy. Non-senior volunteers tend to prefer group volunteering more than their senior counterparts. However, organizations should recognize that certain similarities across age groups are negligible, as volunteers universally value organizations that are welcoming and attuned to community needs, which are non-negotiables rather than age-specific considerations.
 
-All of these responses are to be expected. Volunteering requires substantial time, even if it is for a few hours a week. Scheduling was also a common issue I saw. There are only a certain number of shifts available, and often, to receive an afternoon or weekend shift, you might have to start on a weekday during the day shift.
+## Strategic Implications for Nonprofit Organizations
 
-Unclear expectations are also a major issue. It's not uncommon for volunteer positions to have minimal to no training, which often requires the volunteer to fill in the rest. These uncomfortable experiences make volunteers less likely to volunteer in the future.
+### For Senior Volunteer Recruitment
+1. **Direct Outreach Strategies**
+- 16% of seniors cited "no one asked" as a barrier to volunteering. It can be difficult to reach out to seniors directly, so it will be easier to target community relations with senior-specific community groups such as retired professional associations, and religious organizations. Recruitment can also be assisted by leveraging word-of-mouth through existing senior volunteers.
+Ex. To establish relations with a local senior community, do something specifically for them such as gifting a free event or assist at a one-off event for them. Also ensure you email current volunteers to let them know when you are recruiting.
+2. **Be Approachable**
+- Specifically mention that seniors are welcome to volunteer when advertising. Then, use that promotional material to advertise at venues that seniors attend in your local community by using a senior program directory as a contact list.
+Ex. Include imagery of senior volunteers volunteering in promotional material then place posters in an area such as a community centre that specifically has senior recreation programs and/or senior pricing rates.
+3. **Refocused Recognition**
+- Traditional volunteer appreciation may have less impact on senior volunteers, and that effort can be replaced by emphasizing the community impact and social connection aspects of volunteering. Creating meaningful recognition that aligns with your senior volunteers' motivations can be more important than a one-time thank you.
+Ex. If many senior volunteers are involved in a particular organization, doing something positive for that members of that organization may have a greater impact.
 
+### For Non-Senior Volunteer Recruitment
+1. **Skill Development Emphasis**
+- Clearly articulate the professional skills that can be gained through volunteering at your nonprofit. Create structured volunteer paths that build marketable experiences, and you can offer low-cost certifications and job/academic references as rewards.
+ Ex. Create a volunteer structure with positions for experienced individuals and upwards movability for current volunteers. The two entry routes for those positions will be either being highly qualified beforehand or by reaching enough volunteer hours. Publishing this on your website can help give a goal to current volunteers and assist with recruiting skilled volunteers.
+2. **Flexible Scheduling**
+- Implement variable commitment options that accommodate busy schedules or develop micro-volunteering one-time opportunities. Potentially utilize technology for remote or asynchronous volunteering options.
+Ex. Create small volunteering opportunities for individuals to do one-time volunteering, such as helping out with a specific event or potentially publicize a problem you have then offer rewards for solutions, akin to a call for essays.
+3. **Group Volunteering Opportunities**
+- Create family-friendly or team-based volunteer experiences for student groups. Partner with employers or student groups for group volunteering initiatives. An added benefit is that someone else will be responsible for that volunteer group.
+Ex. You can reach out to student groups and professional organizations that require volunteer hours and state that you have an event they can help with. Then, you can print out signs with their logo on it to say they helped with your event as a thank-you. As an added bonus they will most likely also repost promotional material on their social media if their logo is on it.
 
-##### Possible Improvements for Senior Volunteers
+## Conclusion
 
-Interestingly, for possible improvements, it seems that senior volunteers are not entirely engaged in volunteer appreciation and are not looking for any direct benefit. This is most likely due to seniors volunteering for the sake of helping more than anything else. Volunteering is a way to talk to others, stay engaged, and get out of the house.
+The volunteer landscape in Alberta shows clear demographic patterns that are essential for volunteer coordinators to know. Senior volunteers contribute disproportionately to the volunteer workforce and face distinct challenges from non-seniors.
 
-Since seniors are not necessarily able or willing to drive to locations to volunteer, they are limited to areas close by. Given this, coordinators should focus on engaging seniors who are nearby. Those senior volunteers who are nearby also most likely know other seniors, meaning we can easily compound our efforts through word-of-mouth recruitment.
+Post-pandemic, we can expect to see a decrease in volunteerism due to isolation and an increase in the intensity of volunteering due to the intentionality behind volunteering for the community, especially for 18- —to 24-year-olds. We will fully understand this effect once the most recent Giving, Volunteering, and Participating (GVP) survey based on 2024 data is released.
 
-Our data is also the best for the senior population, as older individuals were more likely to complete the survey.
+The key to effective volunteer engagement lies in understanding these demographic differences and designing volunteer programs that align with each age group's motivations, constraints, and preferences. As volunteer coordinators adapt to changing societal patterns, those who recognize and respond to these age-specific factors will be best positioned to build sustainable volunteer programs.
 
-### WIP
-
-
-
+*Data source: Government of Alberta's Open Data Portal*
+https://open.alberta.ca/publications/survey-of-albertans-online-report
