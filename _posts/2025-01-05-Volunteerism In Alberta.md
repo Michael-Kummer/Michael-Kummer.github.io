@@ -2,6 +2,7 @@
 layout: post
 title: Senior vs Non-Senior Volunteerism In Alberta
 date: '2024-12-31 16:22:20 -0700'
+math: True
 ---
 
 ## Executive Summary
@@ -170,5 +171,4 @@ Post-pandemic, we can expect to see a decrease in volunteerism due to isolation 
 
 The key to effective volunteer engagement lies in understanding these demographic differences and designing volunteer programs that align with each age group's motivations, constraints, and preferences. As volunteer coordinators adapt to changing societal patterns, those who recognize and respond to these age-specific factors will be best positioned to build sustainable volunteer programs.
 
-*Data source: Government of Alberta's Open Data Portal*
-https://open.alberta.ca/publications/survey-of-albertans-online-report
+*Data source: [Government of Alberta's Open Data Portal](https://open.alberta.ca/publications/survey-of-albertans-online-report)*
