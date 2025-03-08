@@ -4,7 +4,7 @@
   <id>http://0.0.0.0:4000/</id>
   <title>Michael</title>
   <subtitle>Data analysis and economic insights | Technical tutorials and project documentation | Exploring the intersection of statistics and technology</subtitle>
-  <updated>2025-02-24T08:26:02-07:00</updated>
+  <updated>2025-03-08T16:10:19-07:00</updated>
   <author>
     <name>Michael Kummer</name>
     <uri>http://0.0.0.0:4000/</uri>
@@ -20,8 +20,8 @@
 
   
   <entry>
-    <title>WIP Volunteerism In Alberta</title>
-    <link href="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" rel="alternate" type="text/html" title="WIP Volunteerism In Alberta" />
+    <title>Senior vs Non-Senior Volunteerism In Alberta</title>
+    <link href="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" rel="alternate" type="text/html" title="Senior vs Non-Senior Volunteerism In Alberta" />
     <published>2024-12-31T16:22:20-07:00</published>
   
     <updated>2025-02-24T07:52:07-07:00</updated>
@@ -36,8 +36,9 @@
     
   
 
-  <summary>Background
-The nonprofit sector of Alberta is experiencing new trends and, with older trends being exacerbated. Currently, we&amp;#39;re seeing declines in the number of Canadians making charitable donations; some Canadians are feeling more disconnected and not giving money or time, and service usage is increasing (Giving survey, 2024). Given these new changes, there needs to be adaptation and new tech...</summary>
+  <summary>Executive Summary
+
+This analysis, based on the Government of Alberta’s 2023 Online survey, delves into age-based differences in volunteer engagement, motivations, and barriers between seniors and non-seniors. The findings were used to create strategies for nonprofit organizations to recruit and retain volunteers, with special attention to senior volunteers who contribute disproportionately to t...</summary>
 
   </entry>
 
