@@ -144,24 +144,24 @@ The differences between the desire for skilled positions with flexible schedulin
 ### For Senior Volunteer Recruitment
 1. **Direct Outreach Strategies**
 - 16% of seniors cited "no one asked" as a barrier to volunteering. It can be difficult to reach out to seniors directly, so it will be easier to target community relations with senior-specific community groups such as retired professional associations, and religious organizations. Recruitment can also be assisted by leveraging word-of-mouth through existing senior volunteers.
-Ex. To establish relations with a local senior community, do something specifically for them such as gifting a free event or assist at a one-off event for them. Also ensure you email current volunteers to let them know when you are recruiting.
+- Ex. To establish relations with a local senior community, do something specifically for them such as gifting a free event or assist at a one-off event for them. Also ensure you email current volunteers to let them know when you are recruiting.
 2. **Be Approachable**
 - Specifically mention that seniors are welcome to volunteer when advertising. Then, use that promotional material to advertise at venues that seniors attend in your local community by using a senior program directory as a contact list.
-Ex. Include imagery of senior volunteers volunteering in promotional material then place posters in an area such as a community centre that specifically has senior recreation programs and/or senior pricing rates.
+- Ex. Include imagery of senior volunteers volunteering in promotional material then place posters in an area such as a community centre that specifically has senior recreation programs and/or senior pricing rates.
 3. **Refocused Recognition**
 - Traditional volunteer appreciation may have less impact on senior volunteers, and that effort can be replaced by emphasizing the community impact and social connection aspects of volunteering. Creating meaningful recognition that aligns with your senior volunteers' motivations can be more important than a one-time thank you.
-Ex. If many senior volunteers are involved in a particular organization, doing something positive for that members of that organization may have a greater impact.
+- Ex. If many senior volunteers are involved in a particular organization, doing something positive for that members of that organization may have a greater impact.
 
 ### For Non-Senior Volunteer Recruitment
 1. **Skill Development Emphasis**
 - Clearly articulate the professional skills that can be gained through volunteering at your nonprofit. Create structured volunteer paths that build marketable experiences, and you can offer low-cost certifications and job/academic references as rewards.
- Ex. Create a volunteer structure with positions for experienced individuals and upwards movability for current volunteers. The two entry routes for those positions will be either being highly qualified beforehand or by reaching enough volunteer hours. Publishing this on your website can help give a goal to current volunteers and assist with recruiting skilled volunteers.
+- Ex. Create a volunteer structure with positions for experienced individuals and upwards movability for current volunteers. The two entry routes for those positions will be either being highly qualified beforehand or by reaching enough volunteer hours. Publishing this on your website can help give a goal to current volunteers and assist with recruiting skilled volunteers.
 2. **Flexible Scheduling**
 - Implement variable commitment options that accommodate busy schedules or develop micro-volunteering one-time opportunities. Potentially utilize technology for remote or asynchronous volunteering options.
-Ex. Create small volunteering opportunities for individuals to do one-time volunteering, such as helping out with a specific event or potentially publicize a problem you have then offer rewards for solutions, akin to a call for essays.
+- Ex. Create small volunteering opportunities for individuals to do one-time volunteering, such as helping out with a specific event or potentially publicize a problem you have then offer rewards for solutions, akin to a call for essays.
 3. **Group Volunteering Opportunities**
 - Create family-friendly or team-based volunteer experiences for student groups. Partner with employers or student groups for group volunteering initiatives. An added benefit is that someone else will be responsible for that volunteer group.
-Ex. You can reach out to student groups and professional organizations that require volunteer hours and state that you have an event they can help with. Then, you can print out signs with their logo on it to say they helped with your event as a thank-you. As an added bonus they will most likely also repost promotional material on their social media if their logo is on it.
+- Ex. You can reach out to student groups and professional organizations that require volunteer hours and state that you have an event they can help with. Then, you can print out signs with their logo on it to say they helped with your event as a thank-you. As an added bonus they will most likely also repost promotional material on their social media if their logo is on it.
 
 ## Conclusion
 
