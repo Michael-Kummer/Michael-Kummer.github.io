@@ -4,7 +4,7 @@
   <id>http://0.0.0.0:4000/</id>
   <title>Michael</title>
   <subtitle>Data analysis and economic insights | Technical tutorials and project documentation | Exploring the intersection of statistics and technology</subtitle>
-  <updated>2025-03-08T17:58:20-07:00</updated>
+  <updated>2025-04-10T20:42:35-06:00</updated>
   <author>
     <name>Michael Kummer</name>
     <uri>http://0.0.0.0:4000/</uri>
@@ -20,11 +20,46 @@
 
   
   <entry>
+    <title>Susceptibility of Canadian Seniors and Males to Varying Fraud and Scam Types</title>
+    <link href="http://0.0.0.0:4000/posts/susceptibility-of-canadian-seniors-and-males-to-varying-fraud-and-scam-types/" rel="alternate" type="text/html" title="Susceptibility of Canadian Seniors and Males to Varying Fraud and Scam Types" />
+    <published>2025-04-10T20:36:00-06:00</published>
+  
+    <updated>2025-04-10T20:36:00-06:00</updated>
+  
+    <id>http://0.0.0.0:4000/posts/susceptibility-of-canadian-seniors-and-males-to-varying-fraud-and-scam-types/</id>
+    <content type="text/html" src="http://0.0.0.0:4000/posts/susceptibility-of-canadian-seniors-and-males-to-varying-fraud-and-scam-types/" />
+    <author>
+      <name>Michael Kummer</name>
+    </author>
+
+  
+    
+    <category term="research" />
+    
+    <category term="fraud-prevention" />
+    
+    <category term="seniors" />
+    
+  
+
+  <summary>Abstract
+
+Seniors within Canada are subject to a wide variety of scams and frauds.
+Seniors are also more or less vulnerable to certain scams. In the face
+of increasing automation, it is critical to explore current
+vulnerabilities to prepare for changing levels of scams. Seniors tend to
+lose more for most scams, especially scams done in person or using
+methods with an individual visible on the o...</summary>
+
+  </entry>
+
+  
+  <entry>
     <title>Senior vs Non-Senior Volunteerism In Alberta</title>
     <link href="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" rel="alternate" type="text/html" title="Senior vs Non-Senior Volunteerism In Alberta" />
     <published>2024-12-31T16:22:20-07:00</published>
   
-    <updated>2025-03-08T16:44:39-07:00</updated>
+    <updated>2025-03-08T17:58:59-07:00</updated>
   
     <id>http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/</id>
     <content type="text/html" src="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" />
