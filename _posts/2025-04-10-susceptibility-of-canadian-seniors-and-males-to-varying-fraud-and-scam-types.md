@@ -2,8 +2,6 @@
 layout: post
 title: Susceptibility of Canadian Seniors and Males to Varying Fraud and Scam Types
 date: 2025-04-10 20:36 -0600
-categories: [research, fraud-prevention, seniors]
-tags: [fraud, scam, seniors, canada, data-analysis]
 math: True
 ---
 Note: This is a nonfinal draft of a submission for a final paper for BUEC 420: Data Science Business Economics and a SOA Call for Essays.
