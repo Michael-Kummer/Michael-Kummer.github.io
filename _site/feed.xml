@@ -4,7 +4,7 @@
   <id>http://0.0.0.0:4000/</id>
   <title>Michael</title>
   <subtitle>Data analysis and economic insights | Technical tutorials and project documentation | Exploring the intersection of statistics and technology</subtitle>
-  <updated>2025-04-18T14:17:18-06:00</updated>
+  <updated>2025-05-01T15:58:42-06:00</updated>
   <author>
     <name>Michael Kummer</name>
     <uri>http://0.0.0.0:4000/</uri>
@@ -20,14 +20,41 @@
 
   
   <entry>
-    <title>The Demographic Divide: An Analysis of Canadian Fraud Loss Patterns</title>
-    <link href="http://0.0.0.0:4000/posts/the-demographic-divide-an-analysis-of-canadian-fraud-loss-patterns/" rel="alternate" type="text/html" title="The Demographic Divide: An Analysis of Canadian Fraud Loss Patterns" />
+    <title>VolunteerConnector Dashboard</title>
+    <link href="http://0.0.0.0:4000/posts/volunteerconnector-dashboard/" rel="alternate" type="text/html" title="VolunteerConnector Dashboard" />
+    <published>2025-04-30T04:14:00-06:00</published>
+  
+    <updated>2025-04-30T04:14:00-06:00</updated>
+  
+    <id>http://0.0.0.0:4000/posts/volunteerconnector-dashboard/</id>
+    <content type="text/html" src="http://0.0.0.0:4000/posts/volunteerconnector-dashboard/" />
+    <author>
+      <name>Michael Kummer</name>
+    </author>
+
+  
+    
+  
+
+  <summary>Note: As this project is ongoing there is not enough data to properly populate some plots. As more time passes the graphs will automatically repopulate to be more accurate.
+
+1. Dashboard Introduction
+
+This is a dashboard that tracks Canadian Volunteer Opportunities from the VolunteerConnector API. This dashboard is updated regularly to show what the current volunteer landscape is.
+The goals are...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>An Analysis of Canadian Fraud Loss Patterns</title>
+    <link href="http://0.0.0.0:4000/posts/an-analysis-of-canadian-fraud-loss-patterns/" rel="alternate" type="text/html" title="An Analysis of Canadian Fraud Loss Patterns" />
     <published>2025-04-18T14:04:00-06:00</published>
   
     <updated>2025-04-18T14:04:00-06:00</updated>
   
-    <id>http://0.0.0.0:4000/posts/the-demographic-divide-an-analysis-of-canadian-fraud-loss-patterns/</id>
-    <content type="text/html" src="http://0.0.0.0:4000/posts/the-demographic-divide-an-analysis-of-canadian-fraud-loss-patterns/" />
+    <id>http://0.0.0.0:4000/posts/an-analysis-of-canadian-fraud-loss-patterns/</id>
+    <content type="text/html" src="http://0.0.0.0:4000/posts/an-analysis-of-canadian-fraud-loss-patterns/" />
     <author>
       <name>Michael Kummer</name>
     </author>
@@ -50,7 +77,7 @@ Canadians are subject to various frauds and scams, with the dollars lost per sca
     <link href="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" rel="alternate" type="text/html" title="Senior vs Non-Senior Volunteerism In Alberta" />
     <published>2024-12-31T16:22:20-07:00</published>
   
-    <updated>2025-03-08T17:58:59-07:00</updated>
+    <updated>2025-05-01T00:14:07-06:00</updated>
   
     <id>http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/</id>
     <content type="text/html" src="http://0.0.0.0:4000/posts/Volunteerism-In-Alberta/" />
@@ -62,9 +89,9 @@ Canadians are subject to various frauds and scams, with the dollars lost per sca
     
   
 
-  <summary>Executive Summary
+  <summary>Summary
 
-This analysis, based on the Government of Alberta’s 2023 Online survey, delves into age-based differences in volunteer engagement, motivations, and barriers between seniors and non-seniors. The findings were used to create strategies for nonprofit organizations to recruit and retain volunteers, with special attention to senior volunteers who contribute disproportionately to t...</summary>
+This analysis, based on the Government of Alberta’s 2023 Online survey, delves into age-based differences in volunteer engagement, motivations, and barriers between seniors and non-seniors. The findings were used to create strategies for nonprofit organizations to recruit and retain volunteers, with special attention to senior volunteers who contribute disproportionately to the volunte...</summary>
 
   </entry>
 

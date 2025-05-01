@@ -5,7 +5,7 @@ date: '2024-12-31 16:22:20 -0700'
 math: True
 ---
 
-## Executive Summary
+## Summary
 
 This analysis, based on the Government of Alberta's 2023 Online survey, delves into age-based differences in volunteer engagement, motivations, and barriers between seniors and non-seniors. The findings were used to create strategies for nonprofit organizations to recruit and retain volunteers, with special attention to senior volunteers who contribute disproportionately to the volunteer workforce.
 
@@ -29,7 +29,7 @@ Currently, we are working on outdated information based on the Statistics Canada
 Data preparation involved:
 - Removing unrelated questions and standardizing related questions.
 - Ensuring all "Refused to Respond"'s were changed to NA.
-- Python (Pandas and PlotNine) are used for analysis and visualization.
+- Python (Pandas, PlotNine, Bokeh, Plotly) are used for analysis and visualization.
 
 Our hypothesis for this analysis is whether there is a substantial difference between the challenges faced by senior and non-senior volunteers.
 
@@ -85,31 +85,67 @@ Our hypothesis for this analysis is whether there is a substantial difference be
 *Note: the 18-24 range cannot be used to predict or determine anything about their volunteering rates*
 As expected, senior individuals volunteer the most hours per month. The older an individual becomes, the longer they will spend volunteering. Younger groups, such as 25 to 34-year-olds, volunteer the fewest hours per month, which is to be expected as individuals under 55 will have less time than those who are retired.
 
-##### Figure 2: What do Different Age Demographics Value?
-<div class="plotly-container" style="width: 100%; overflow-x: scroll; -webkit-overflow-scrolling: touch;">
-  <iframe src="{{ '/assets/postImages/post1/DropDownVolunteerPreference.html' | relative_url }}"
-          height="750px" width="1100px" 
-          style="border: none; max-width: none;transform: scale(0.8);"
-          scrolling="no"></iframe>
+##### Figure 2: What do Different Age Groups Value?
+
+<div class="bokeh-container">
+  <iframe src="{{ '/assets/postImages/post1/VolunteerPreferencesBokeh.html' | relative_url }}"
+          style="width: 100%; height: 700px; border: none;"
+          scrolling="no"
+          onload="this.contentWindow.document.body.style.overflow='hidden'"></iframe>
 </div>
+<style>
+.bokeh-container {
+  width: 100%;
+  max-width: 100%;  /* Allow full width */
+  margin: 0 auto;
+  margin-bottom: 50px;
+  height: 500px;  /* Increased height to give more space */
+  position: relative;
+  overflow: hidden;
+}
+.bokeh-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  transform-origin: 0 0;  /* Add this */
+}
+/* For mobile screens */
+@media (max-width: 768px) {
+  .bokeh-container {
+    height: 600px;
+  }
+}
+</style>
+*Note: This plot is entirely interactive.*
 
+1) In the past, I have found younger individuals to want to volunteer at places they would eventually like to work at. These younger individuals also want more opportunities to grow their respective skill sets. Individuals under 55 align with this experience, as most would see increased appeal through skill-focused volunteering. 
 
-
-In the past, I have found younger individuals to want to volunteer at places they would eventually like to work. These younger individuals also want more opportunities to grow their respective skill sets. Individuals under 55 align with this experience, as most would see increased appeal through skill-focused volunteering. 
-
-In terms of volunteer appreciation, increasing levels of appreciation might not have the impact most coordinators believe it will on a subsection of volunteers. Since the distribution seems relatively even across most of the responses, volunteer appreciation is still important, but it does not positively affect all volunteers, especially older individuals.
+2) In terms of volunteer appreciation, increasing levels of appreciation might not have the impact most coordinators believe it will on a subsection of volunteers. Since the distribution seems relatively even across most of the responses, volunteer appreciation is still important, but it does not positively affect all volunteers, especially older individuals.
 
 ##### Figure 3: Volunteerism by Area
 
-<div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-  <div style="min-width: 950px;">
-    <iframe src="{{ '/assets/postImages/post1/ParticipationByArea.html' | relative_url }}"
-            height="650px" width="100%" 
-            style="border: none;transform: scale(0.75);"
-            scrolling="no"></iframe>
-  </div>
+<div class="plotly-container">
+  <iframe src="{{ '/assets/postImages/post1/ParticipationByArea.html' | relative_url }}"
+          style="width: 100%; height: 600px; border: none;"
+          scrolling="no"></iframe>
 </div>
 
+<style>
+.plotly-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+/* For mobile screens, adjust height */
+@media (max-width: 768px) {
+  .plotly-container iframe {
+    height: 450px;
+  }
+}
+</style>
 
 
 ## Statistical Analysis: Seniors vs. Non-Seniors
@@ -122,7 +158,7 @@ Two groups were chosen from this survey: seniors and non-seniors. Since individu
 	- NS: $P \gt 0.05$ (Not Significant)
 	- "\*": $P \le 0.05$
 	- "\*\*": $P \le 0.01$
-	- "\*\*\*" $P \le 0.001$ (Very Significant)
+	- "\*\*\*": $P \le 0.001$ (Very Significant)
 
 ### Top Challenges by Age Group
 
