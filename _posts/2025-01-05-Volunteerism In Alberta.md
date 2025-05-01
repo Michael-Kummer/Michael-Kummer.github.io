@@ -85,13 +85,32 @@ Our hypothesis for this analysis is whether there is a substantial difference be
 *Note: the 18-24 range cannot be used to predict or determine anything about their volunteering rates*
 As expected, senior individuals volunteer the most hours per month. The older an individual becomes, the longer they will spend volunteering. Younger groups, such as 25 to 34-year-olds, volunteer the fewest hours per month, which is to be expected as individuals under 55 will have less time than those who are retired.
 
-##### Figure 2: Do Potential Volunteers Value Skill Development?
-![[skill_development_heatmap.png]]({{'/assets/postImages/post1/skill_development_heatmap.png' | relative_url}})
+##### Figure 2: What do Different Age Demographics Value?
+<div class="plotly-container" style="width: 100%; overflow-x: scroll; -webkit-overflow-scrolling: touch;">
+  <iframe src="{{ '/assets/postImages/post1/DropDownVolunteerPreference.html' | relative_url }}"
+          height="750px" width="1100px" 
+          style="border: none; max-width: none;transform: scale(0.8);"
+          scrolling="no"></iframe>
+</div>
+
+
+
 In the past, I have found younger individuals to want to volunteer at places they would eventually like to work. These younger individuals also want more opportunities to grow their respective skill sets. Individuals under 55 align with this experience, as most would see increased appeal through skill-focused volunteering. 
 
-##### Figure 3: Volunteer Appreciation Appeal by Age Group (%)
-![[recognition_heatmap 1.png]]({{'/assets/postImages/post1/recognition_heatmap 1.png' | relative_url}})
 In terms of volunteer appreciation, increasing levels of appreciation might not have the impact most coordinators believe it will on a subsection of volunteers. Since the distribution seems relatively even across most of the responses, volunteer appreciation is still important, but it does not positively affect all volunteers, especially older individuals.
+
+##### Figure 3: Volunteerism by Area
+
+<div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+  <div style="min-width: 950px;">
+    <iframe src="{{ '/assets/postImages/post1/ParticipationByArea.html' | relative_url }}"
+            height="650px" width="100%" 
+            style="border: none;transform: scale(0.75);"
+            scrolling="no"></iframe>
+  </div>
+</div>
+
+
 
 ## Statistical Analysis: Seniors vs. Non-Seniors
 
