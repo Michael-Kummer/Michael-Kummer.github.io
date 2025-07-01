@@ -4,7 +4,7 @@ title: 'An Analysis of Canadian Fraud Loss Patterns'
 date: 2025-04-18 14:04 -0600
 math: True
 ---
-Note: This was a submission for an SOA Call for Essays and was also a final paper for BUEC 420: Data Analysis in Business Economics
+Note: This was a successful submission for an SOA Call for Essays where it will be copyedited then published to their website. This was also a final paper for BUEC 420: Data Analysis in Business Economics.
 
 ## Abstract
 
