@@ -27,7 +27,7 @@
     video.addEventListener('play', () => show(false));
     video.addEventListener('pause', () => show(true));
     video.addEventListener('ended', () => {
-      video.load(); // back to the poster
+      video.load(); /* back to the poster (block comment: production compresses this onto one line) */
       show(true);
     });
   })();

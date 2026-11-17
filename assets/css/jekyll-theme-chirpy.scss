@@ -246,6 +246,226 @@ html {
   border-color: transparent transparent transparent #fff;
 }
 
+/* Pixel art scenes (assets/js/pixel; rules in docs/pixel-art.md). Decoration only. */
+.px-scene {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+
+  canvas {
+    display: block;
+    image-rendering: pixelated;
+  }
+}
+
+/* Pixel art: ground and sidebar */
+// The landscape band is fixed to the bottom of the viewport, right of the sidebar, and the sidebar
+// strip is fixed at the same height, so they meet as one picture. prairie.js sets the sizes:
+// --px-ground-h (band height), --px-ground-left (band start, on the art grid), --px-side-w.
+// The band is a background: the page content stacks above it and cards pass over it.
+html.has-px-ground {
+  #main-wrapper {
+    z-index: 1; // above the band (it is already position: relative)
+    padding-bottom: var(--px-ground-h, 216px);
+    // the wrapper's empty box must not swallow clicks meant for the sign link under it
+    pointer-events: none;
+
+    > * {
+      pointer-events: auto;
+    }
+
+    > .container {
+      min-height: calc(100vh - var(--px-ground-h, 216px));
+    }
+  }
+
+  #sidebar {
+    z-index: 2; // the phone drawer and its icons stay above the page and the band
+    padding-bottom: var(--px-ground-h, 216px);
+  }
+
+  &.px-ground-fixed #back-to-top {
+    bottom: calc(var(--px-ground-h, 216px) + 1rem);
+  }
+}
+
+// Chirpy fades the contents list out with a fixed strip at the window bottom, painted in the page
+// colour; over the band it showed as a dark gap in the wheat and badlands
+html.has-px-ground #toc-wrapper::after {
+  display: none;
+}
+
+// posts: the article column is cut out of the band (prairie.js sets --px-hole-l/r from <main>),
+// so the art runs under the sidebar and the contents column but never under the text
+html.px-ground-post .px-scene--ground {
+  // hard edges, on the sidebar line and the contents-column line
+  -webkit-mask-image: linear-gradient(to right, #000 var(--px-hole-l, 0px), transparent var(--px-hole-l, 0px), transparent var(--px-hole-r, 0px), #000 var(--px-hole-r, 0px));
+  mask-image: linear-gradient(to right, #000 var(--px-hole-l, 0px), transparent var(--px-hole-l, 0px), transparent var(--px-hole-r, 0px), #000 var(--px-hole-r, 0px));
+}
+
+// other pages: the content fades out just above the band's horizon. prairie.js keeps
+// --px-fade-y (in the container's own coordinates) at the band's top as the page scrolls.
+html.px-ground-fixed:not(.px-ground-post) #main-wrapper > .container {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--px-fade-y, 200vh) - 90px), transparent var(--px-fade-y, 200vh));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--px-fade-y, 200vh) - 90px), transparent var(--px-fade-y, 200vh));
+}
+
+.px-scene--ground {
+  position: fixed;
+  left: var(--px-ground-left, 0);
+  right: 0;
+  bottom: 0;
+  height: var(--px-ground-h, 216px);
+  z-index: 0;
+  transition: transform 0.35s ease;
+
+  // reading comes first: slides away while reading a post, and while the phone drawer is open
+  &.is-away,
+  [sidebar-display] & {
+    transform: translateY(100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.px-scene--sidebar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: var(--px-side-w, 260px);
+  height: var(--px-ground-h, 216px);
+
+  @media (max-width: 849.98px) {
+    display: none;
+  }
+}
+
+// the footer line is lettered on the roadside sign: the sign carries the licence note, and a
+// transparent link lies over the drawn name
+.px-sign,
+.px-sign__link {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.px-sign__link {
+  display: block;
+  cursor: pointer;
+}
+
+// the real footer stays for screen readers, out of sight and out of the flow
+html.has-px-footer #tail-wrapper footer {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin px-icons-night {
+  #sidebar .sidebar-bottom {
+    #mode-toggle,
+    a {
+      color: #b4c3e6; // haze2: moonlit
+
+      &:hover,
+      &:focus-visible {
+        color: #ffeaa8; // glow4: lamplit
+      }
+    }
+  }
+}
+
+// the sidebar icons stand in the strip, on a lantern and a carved trailhead board
+@media (min-width: 850px) {
+  html.has-px-ground #sidebar .sidebar-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 33px; // icons stand on the lantern and board, above 8 art px of ground
+    width: var(--px-side-w, 260px) !important; // beats Bootstrap's .w-100, which made it span the window and block clicks
+    flex-wrap: nowrap;
+    margin: 0;
+    z-index: 2;
+
+    #mode-toggle,
+    a {
+      margin-bottom: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #cbc6da; // stone5
+      text-shadow: 2px 2px 0 #0e0a17; // ink0
+      transition: color 0.15s;
+
+      &:hover,
+      &:focus-visible {
+        background: transparent;
+        color: #fff3c6; // gold5
+      }
+    }
+
+    .icon-border {
+      visibility: hidden;
+    }
+  }
+
+  html.has-px-ground[data-mode='dark'] {
+    @include px-icons-night;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html.has-px-ground:not([data-mode]) {
+      @include px-icons-night;
+    }
+  }
+}
+/* end: ground and sidebar */
+
+/* Pixel art: home layout */
+// Home page: the cards fill the main column, with the same 16px gap to the sidebar, the window
+// edge and the top as between the cards themselves
+@media (min-width: 1200px) {
+  // :has() can't be nested, so test from #main-wrapper down
+  #main-wrapper:has(#post-list) > .container {
+    max-width: none;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  main:has(#post-list) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  main #post-list,
+  main:has(#post-list) .pagination {
+    width: 100%;
+    max-width: 760px; // wider cards look stretched; the left gap stays 16px
+    margin-left: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+// desktop: the topbar is empty (no breadcrumb, no search), so drop it and start the page at the top
+@media (min-width: 850px) {
+  #topbar-wrapper {
+    display: none !important;
+  }
+
+  main:has(#post-list) #post-list {
+    margin-top: 16px !important;
+  }
+}
+/* end: home layout */
+
 /* Mermaid: replace the default lavender nodes with the card grey */
 .mermaid .node {
   rect,
