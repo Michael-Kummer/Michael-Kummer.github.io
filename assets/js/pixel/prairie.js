@@ -10,10 +10,10 @@
 
   const H = 72; // art pixels tall
   const GY = 56; // where the near ground starts
-  const CY = 48; // where the distant city stands
+  const CY = 50; // where the distant city stands (its north bank)
 
   function zones(W) {
-    const z = { mtn: [0, 0.2 * W], boreal: [0.2 * W, 0.37 * W], park: [0.37 * W, 0.5 * W] };
+    const z = { mtn: [0, 0.2 * W], boreal: [0.2 * W, 0.355 * W], park: [0.355 * W, 0.5 * W] };
     z.prairie = [0.5 * W, 0.81 * W];
     z.bad = [0.81 * W, W];
     for (const k in z) z[k].push(z[k][1] - z[k][0]); // [start, end, width]
@@ -21,6 +21,11 @@
   }
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  // Where two biomes meet in the foreground: a ragged seam SEAM art px wide, dithered from one
+  // side to the other, instead of a straight cut. True when (x, y) belongs to the east side of b.
+  const SEAM = 8;
+  const past = (x, y, b) => dither(x, y, clamp((x - b - (noise1(y * 0.6 + b, 61) - 0.5) * 4) / SEAM + 0.5, 0, 1));
   const ramp = (name, f, x, y, lo, hi) => {
     // a continuous step f along a ramp, dithered between neighbouring steps
     f = clamp(f, lo, hi);
@@ -29,6 +34,7 @@
   };
 
   /* ---------------- sky (cached) ---------------- */
+
   // T is the first row that is shown (phones crop the top of the sky)
   function drawSky(p, W, night, T) {
     const fade = T ? 14 : 18;
@@ -154,17 +160,20 @@
     drawCity(p, city);
     drawPortal(p, portal);
 
-    /* ground band across everything */
+    /* ground band across everything; in the foreground the biomes meet in ragged, dithered seams */
+    const edges = [z.boreal[0], z.park[0], z.prairie[0], z.bad[0]];
     for (let x = 0; x < W; x++) {
       for (let y = GY - 4; y < H; y++) {
         let name = null;
-        if (x < z.boreal[0]) {
+        let k = 0;
+        for (const b of edges) if (y < GY ? x >= b : past(x, y, b)) k++;
+        if (k === 0) {
           if (y >= GY) name = hash(x, y, 7) > 0.9 ? 'grass4' : dither(x, y, 0.35 + (y - GY) / 30) ? 'grass2' : 'grass3';
-        } else if (x < z.park[0]) {
+        } else if (k === 1) {
           if (y >= GY) name = hash(x, y, 8) > 0.88 ? 'grass3' : dither(x, y, 0.5) ? 'spruce2' : 'spruce1';
-        } else if (x < z.prairie[0]) {
+        } else if (k === 2) {
           if (y >= GY) name = hash(x, y, 9) > 0.93 ? (hash(x, y, 10) > 0.5 ? 'rose3' : 'cream4') : y % 3 === 0 ? 'grass3' : 'grass4';
-        } else if (x < z.bad[0]) {
+        } else if (k === 3) {
           name = field(x, y, z);
         } else if (y >= GY) {
           name = hash(x, y, 12) > 0.93 ? 'clay3' : (x * 7 + y * 13) % 23 === 0 ? 'clay2' : dither(x, y, 0.3) ? 'clay4' : 'clay5';
@@ -303,34 +312,38 @@
   }
 
   /* ---------------- the Edmonton skyline (cached, in the parkland distance) ---------------- */
-  // Seen from the south across the North Saskatchewan: the High Level Bridge where the valley
-  // bends, the Legislature, downtown with Stantec Tower, and the Muttart pyramids on the flats.
+  // Seen from the south bank across the North Saskatchewan, west to east: the High Level Bridge,
+  // the Legislature, the Walterdale Bridge down in the valley, downtown (Commerce Place, Manulife
+  // Place, Epcor Tower, Stantec Tower set back in the ICE District, Bell Tower, CN Tower), the Hotel
+  // Macdonald on the bank and the Muttart pyramids on the valley floor. Tower heights follow the
+  // real ones (Stantec ~251 m = 27 art px).
   function cityPlan(z, W, phone) {
-    const bl = phone ? 9 : Math.round(clamp(z.park[2] * 0.17, 13, 19)); // bridge span
-    const dt = phone ? 18 : Math.round(clamp(z.park[2] * 0.4, 26, 40)); // downtown width
-    const cw = bl + 12 + dt + 4;
-    const x0 = Math.round(z.park[0] + z.park[2] * 0.5 - cw * 0.5 + (phone ? 4 : 2));
-    const c = { x0, x1: x0 + cw, phone };
+    const tier = phone ? 0 : z.park[2] >= 85 ? 2 : 1;
+    const c = { tier, phone };
+    const bl = [8, 10, 14][tier]; // High Level Bridge span
+    const lw = [13, 17, 25][tier]; // Legislature width
+    const mw = [0, 8, 10][tier]; // Hotel Macdonald width
+    // downtown: [name, x offset, width, height], drawn in this order (Stantec first: it is set back)
+    c.towers =
+      tier === 0
+        ? [['stantec', 7, 3, 20], ['manulife', 0, 4, 12], ['epcor', 3, 4, 13], ['bell', 10, 4, 11], ['cn', 14, 4, 10]]
+        : [['stantec', 14, 4, 27], ['commerce', 0, 4, 12], ['manulife', 4, 5, 15], ['epcor', 9, 5, 16], ['bell', 18, 4, 14], ['cn', 23, 5, 12]];
+    const dw = tier === 0 ? 18 : 28;
+    const cw = bl + 2 + lw + 1 + dw + (mw ? mw + 1 : 0);
+    // phones: the parkland is narrower than the city, so it runs west into the forest instead
+    const x0 = Math.round(tier === 0 ? z.park[1] - cw : z.park[0] + z.park[2] * 0.5 - cw * 0.5);
+    c.x0 = x0;
     c.bridge = [x0, x0 + bl];
-    c.leg = x0 + bl + 1;
-    c.dt = [x0 + bl + 12, x0 + bl + 12 + dt];
-    c.stantec = c.dt[0] + Math.round(dt * 0.46);
-    c.muttart = c.dt[1] - (phone ? 11 : 15);
-    // towers left to right: [x, w, h, back row]
-    const towers = [];
-    let x = c.dt[0];
-    let n = 0;
-    while (x < c.dt[1] - 2) {
-      const w = 3 + Math.floor(hash(n, 171) * 3);
-      const near = 1 - Math.abs(x + w / 2 - c.stantec) / (dt * 0.6);
-      const h = Math.round(6 + 10 * clamp(near, 0, 1) * (0.55 + 0.45 * hash(n, 172)));
-      if (Math.abs(x + w / 2 - c.stantec - 2) > 3) towers.push([x, w, h, false]);
-      // a lower, hazier building behind the gap
-      towers.push([x + w - 1, 3, Math.max(4, h - 3 - Math.floor(hash(n, 173) * 4)), true]);
-      x += w + (hash(n, 174) > 0.6 ? 1 : 0);
-      n++;
-    }
-    c.towers = towers.sort((a, b) => b[3] - a[3]);
+    c.leg = x0 + bl + 2;
+    c.lw = lw;
+    c.dt = [c.leg + lw + 1, c.leg + lw + 1 + dw];
+    c.mac = mw ? [c.dt[1] + 1, c.dt[1] + 1 + mw] : null;
+    c.x1 = c.mac ? c.mac[1] : c.dt[1];
+    const st = c.towers[0];
+    c.stantec = c.dt[0] + st[1];
+    c.beacon = [c.stantec + 1, CY - st[3] - 3];
+    c.muttart = c.dt[0] + (tier === 0 ? 6 : 9);
+    c.walter = tier ? [c.leg + lw - 5, c.dt[0] + 6] : null;
     return c;
   }
 
@@ -339,23 +352,201 @@
     if (p.night && hash(x, y, n) > 0.5) p.px(x, y, hash(x, y, n + 1) > 0.7 ? 'glow4' : 'glow3', true);
   }
 
+  // window colour: dark by day, sometimes lit at night
+  function cityWindow(p, x, y, day, n) {
+    p.px(x, y, day);
+    cityLights(p, x, y, n);
+  }
+
+  /* the Legislature: sandstone wings, a columned portico, a drum with arched windows, the dome and
+     its lantern. Lit from the upper left; floodlit at night. */
+  function legislature(p, x0, w, night) {
+    const cx = x0 + (w >> 1);
+    const tier = w >= 25 ? 2 : w >= 17 ? 1 : 0;
+    const wh = [3, 4, 4][tier]; // wing height
+    const ch = wh + 2; // central block height
+    const R = [3, 3, 4][tier]; // dome radius
+    const hw = [3, 5, 7][tier]; // central block half width
+    const wall = (x, xa, xb) => (x === xb ? 'mauve2' : x - xa < (xb - xa) * 0.55 ? 'cream2' : 'cream1');
+    // wings
+    for (let y = CY - wh + 1; y <= CY; y++)
+      for (let x = x0; x < x0 + w; x++) {
+        const r = y - (CY - wh + 1);
+        let name = wall(x, x0, x0 + w - 1);
+        if (r === 0) name = x === x0 + w - 1 ? 'mauve3' : 'cream3'; // cornice
+        else if (y === CY) name = x === x0 + w - 1 ? 'mauve1' : 'cream0'; // rusticated base
+        else if ((x - x0) % 2 === 1 && x < x0 + w - 1) {
+          cityWindow(p, x, y, 'slate1', 201);
+          continue;
+        }
+        p.px(x, y, name);
+      }
+    // central block
+    const b0 = cx - hw;
+    const b1 = cx + hw;
+    for (let y = CY - ch + 1; y <= CY; y++)
+      for (let x = b0; x <= b1; x++) {
+        const r = y - (CY - ch + 1);
+        let name = wall(x, b0, b1);
+        if (r === 0) name = x === b1 ? 'mauve3' : 'cream3';
+        else if (r === 1 && tier) name = x % 2 ? 'cream1' : x === b1 ? 'mauve2' : 'cream3'; // balustrade
+        else if (y === CY) name = x === b1 ? 'mauve1' : 'cream0';
+        else if ((x - b0) % 2 === 1 && x < b1 && Math.abs(x - cx) > 2) {
+          cityWindow(p, x, y, 'slate1', 202);
+          continue;
+        }
+        p.px(x, y, name);
+      }
+    // portico: columns and a pediment, standing a little proud of the block
+    const pw = tier ? 3 : 2;
+    const py = CY - ch + 2;
+    for (let y = py + 1; y < CY; y++)
+      for (let x = cx - pw; x <= cx + pw; x++) p.px(x, y, (x - cx + pw) % 2 ? 'mauve1' : x > cx ? 'cream2' : 'cream3');
+    for (let x = cx - pw - 1; x <= cx + pw + 1; x++) p.px(x, py, x > cx ? 'cream2' : 'cream3');
+    for (let i = -pw; i <= pw; i++) {
+      const lift = pw - Math.abs(i);
+      if (lift > 0) p.px(cx + i, py - 1, i > 0 ? 'mauve3' : 'cream3');
+      if (lift > 2) p.px(cx + i, py - 2, i > 0 ? 'mauve3' : 'cream3');
+    }
+    p.px(cx - pw - 1, CY, 'cream1'), p.px(cx + pw + 1, CY, 'mauve1'); // steps
+    for (let x = cx - pw; x <= cx + pw; x++) p.px(x, CY, 'cream2');
+    // drum with arched windows
+    const dr = R + 1;
+    const dTop = CY - ch - (tier ? 2 : 1);
+    for (let y = dTop; y < CY - ch + 1; y++)
+      for (let x = cx - dr; x <= cx + dr; x++) {
+        const edge = x === cx + dr;
+        let name = edge ? 'mauve2' : x < cx ? 'cream3' : 'cream2';
+        if (y === dTop) name = edge ? 'mauve3' : 'cream3'; // cornice
+        else if ((x - cx + dr) % 2 === 1 && !edge) {
+          cityWindow(p, x, y, y === dTop + 1 ? 'slate2' : 'slate1', 203);
+          continue;
+        }
+        p.px(x, y, name);
+      }
+    // dome: ribbed, lit on the left
+    for (let r = 0; r < R; r++) {
+      const y = dTop - 1 - r;
+      const half = Math.round(Math.sqrt(R * R - r * r) + 0.25);
+      for (let i = -half; i <= half; i++) {
+        const f = i / (half + 0.5);
+        let name = f < -0.2 ? 'cream3' : f < 0.35 ? 'cream2' : 'mauve3';
+        if (i === half) name = 'mauve2';
+        if (tier && i !== 0 && i % 2 === 0 && Math.abs(i) < half && r < R - 1) name = f < 0.35 ? 'cream1' : 'mauve2'; // ribs
+        p.px(cx + i, y, name);
+      }
+    }
+    // lantern and finial
+    const ly = dTop - R - 1;
+    p.px(cx - 1, ly, 'cream3'), p.px(cx, ly, night ? 'glow3' : 'slate1', night), p.px(cx + 1, ly, 'mauve2');
+    if (tier) p.px(cx - 1, ly - 1, 'cream2'), p.px(cx, ly - 1, 'cream2'), p.px(cx + 1, ly - 1, 'mauve2');
+    const fy = ly - (tier ? 2 : 1);
+    p.px(cx, fy, 'cream1'), p.px(cx, fy - 1, 'rock1');
+    if (night) {
+      // floodlights on the dome and the portico
+      for (let r = 0; r < R - 1; r++) p.px(cx - 1, dTop - 1 - r, 'cream4', true), p.px(cx - 2, dTop - 1 - r, 'cream3', true);
+      for (let x = cx - pw; x <= cx; x += 2) p.px(x, CY - 1, 'cream3', true);
+    }
+  }
+
+  /* one downtown tower, by name: its material, window pattern and crown */
+  const TOWERS = {
+    // dark green-black glass in horizontal bands
+    commerce: { lit: 'slate3', mid: 'slate2', shade: 'slate1', win: (i, r) => r % 2 === 1, wl: 'teal1', ws: 'slate0' },
+    // bronze glass, a stepped top
+    manulife: { lit: 'dirt4', mid: 'dirt3', shade: 'dirt2', win: (i, r) => i % 2 === 1, wl: 'dirt2', ws: 'dirt1', step: true },
+    // blue glass, the roof slopes up to the east
+    epcor: { lit: 'rock4', mid: 'rock3', shade: 'rock2', win: (i, r) => r % 2 === 1 && i % 2 === 1, wl: 'rock2', ws: 'rock1', slope: true },
+    // tan precast, inset crown
+    bell: { lit: 'bone3', mid: 'bone2', shade: 'bone1', win: (i, r) => r % 2 === 0 && i % 2 === 1, wl: 'bone1', ws: 'bone0', inset: true },
+    // white, with its dark ribbon windows
+    cn: { lit: 'birch4', mid: 'birch3', shade: 'birch2', win: (i, r) => r % 2 === 1, wl: 'slate2', ws: 'slate1' },
+  };
+
+  function tower(p, x, w, h, kind) {
+    const m = TOWERS[kind];
+    const top = CY - h;
+    for (let y = top; y <= CY; y++)
+      for (let i = 0; i < w; i++) {
+        const r = y - top;
+        if (m.slope && r < w - 2 && i < w - 2 - r) continue;
+        if (m.step && r < 2 && (i === 0 || i === w - 1)) continue;
+        if (m.inset && r === 0 && (i === 0 || i === w - 1)) continue;
+        const shade = i === w - 1;
+        let name = i === 0 ? m.lit : shade ? m.shade : m.mid;
+        if (r > 1 && y < CY && m.win(i, r) && i > 0) {
+          cityWindow(p, x + i, y, shade ? m.ws : m.wl, 178);
+          continue;
+        }
+        if (m.slope && i === w - 2 - r) name = m.lit; // glass catching the light along the slope
+        p.px(x + i, y, name);
+      }
+  }
+
+  // Stantec Tower: the tallest, pale, its top cut on a slant to a point
+  function stantec(p, x, w, h) {
+    const top = CY - h;
+    for (let y = top; y <= CY; y++) {
+      const r = y - top;
+      for (let i = 0; i < w; i++) {
+        if (r < w * 2 && i > r >> 1) continue; // the slanted cut, high on the west
+        let name = i === 0 ? 'snow2' : i === w - 1 ? 'rock2' : 'rock4';
+        if (r > 6 && r % 3 === 0 && i > 0) name = i === w - 1 ? 'rock1' : 'rock3';
+        p.px(x + i, y, name);
+        if (r > 6 && r % 3 === 1 && i > 0) cityLights(p, x + i, y, 181);
+      }
+    }
+    p.px(x, top - 1, 'rock2'), p.px(x, top - 2, 'rock2'); // spire
+  }
+
+  // Hotel Macdonald: a cream château with a steep copper roof, dormers and corner turrets
+  function hotelMac(p, x0, w, night) {
+    const x1 = x0 + w - 1;
+    for (let y = CY - 3; y <= CY; y++)
+      for (let x = x0; x <= x1; x++) {
+        let name = x === x1 ? 'cream0' : x - x0 < w * 0.5 ? 'cream3' : 'cream2';
+        if (y < CY && y > CY - 3 && (x - x0) % 2 === 1 && x < x1) {
+          cityWindow(p, x, y, 'mauve2', 204);
+          continue;
+        }
+        if (y === CY) name = x === x1 ? 'mauve1' : 'cream1';
+        p.px(x, y, name);
+      }
+    // roof
+    for (let r = 0; r < 3; r++) {
+      const y = CY - 4 - r;
+      for (let x = x0 + r; x <= x1 - r; x++) {
+        let name = x === x1 - r ? 'teal1' : x - x0 < w * 0.45 ? 'teal4' : 'teal3';
+        if (r === 0 && (x - x0) % 3 === 1 && x < x1 - 1) name = 'cream3'; // dormers
+        p.px(x, y, name);
+      }
+    }
+    // turrets with pointed caps at both ends, a chimney in the middle
+    for (const tx of [x0, x1]) {
+      p.px(tx, CY - 4, tx === x1 ? 'cream0' : 'cream2');
+      p.px(tx, CY - 5, tx === x1 ? 'teal1' : 'teal3'), p.px(tx, CY - 6, tx === x1 ? 'teal1' : 'teal4');
+    }
+    p.px(x0 + (w >> 1), CY - 7, 'cream1');
+    if (night) p.px(x0 + 1, CY - 6, 'glow3', true);
+  }
+
   function drawCity(p, c) {
     const night = p.night;
-    /* the valley: wooded north bank, the river, and the bend under the bridge */
-    for (let x = c.bridge[0] - 2; x < c.x1 + 2; x++) {
+    /* the valley: the north bank, the river, the south bank */
+    for (let x = c.bridge[0] - 2; x < c.x1 + 3; x++) {
       p.px(x, CY + 1, dither(x, CY + 1, 0.5) ? 'spruce2' : 'grass2');
-      p.px(x, CY + 2, hash(x, 175) > 0.8 ? 'haze3' : 'haze2');
-      p.px(x, CY + 3, x % 5 === 0 ? 'haze2' : 'haze1');
+      p.px(x, CY + 2, hash(x, 175) > 0.8 ? 'haze2' : 'water2');
+      p.px(x, CY + 3, x % 5 === 0 ? 'water2' : 'water1');
       p.px(x, CY + 4, dither(x, CY + 4, 0.5) ? 'grass2' : 'grass3');
     }
     const [b0, b1] = c.bridge;
     const mid = (b0 + b1) / 2;
+    const dip = (x) => Math.round(4 * (1 - Math.pow((x - mid) / ((b1 - b0) / 2 + 1), 2)));
     for (let x = b0; x <= b1; x++) {
       // the valley seen in profile where the river bends toward us
-      const d = Math.round(4 * (1 - Math.pow((x - mid) / ((b1 - b0) / 2 + 1), 2)));
-      // the far side of the valley, hazy, then the water at the bottom
+      const d = dip(x);
       for (let y = CY - 1; y < CY + d; y++) p.px(x, y, y < CY ? 'haze1' : dither(x, y, 0.5) ? 'grass2' : 'haze0');
-      p.px(x, CY + d, hash(x, 176) > 0.6 ? 'haze3' : 'haze2');
+      p.px(x, CY + d, hash(x, 176) > 0.6 ? 'water4' : 'water3');
       p.px(x, CY + 1 + d, 'grass2');
     }
     /* High Level Bridge: a long steel truss on lattice towers */
@@ -364,79 +555,49 @@
       if (x % 2 === 0) p.px(x, deck - 2, 'rock1'); // truss panels
       p.px(x, deck - 1, x % 2 ? 'rock3' : 'rock1');
       p.px(x, deck, 'rock0');
-      const k = x - b0;
-      if (k % 4 === 2 && x < b1) {
+      if ((x - b0) % 4 === 2 && x < b1) {
         // lattice towers down to the water
-        for (let y = deck + 1; y < CY + 6; y++) {
-          const d = Math.round(4 * (1 - Math.pow((x - mid) / ((b1 - b0) / 2 + 1), 2)));
-          if (y > CY + d) break;
-          p.px(x, y, 'rock1'), p.px(x + 1, y, y % 2 ? 'rock2' : 'rock0');
-        }
+        for (let y = deck + 1; y <= CY + dip(x); y++) p.px(x, y, 'rock1'), p.px(x + 1, y, y % 2 ? 'rock2' : 'rock0');
       }
       if (night && x % 2 === 0) p.px(x, deck - 1, ['rose3', 'aurora2', 'glow3', 'aurora5'][(x >> 1) % 4], true);
     }
 
-    /* Legislature: sandstone hall, columns, drum and dome */
-    const leg = window.Pixel.sprite(
-      [
-        '.....r.....',
-        '....DDd....',
-        '...DDDdd...',
-        '...DDDdd...',
-        '....LLS....',
-        '...LwLwS...',
-        '.LLLLLLSSS.',
-        'LLwLwLwSwSS',
-        'LLLLLLLSSSS',
-      ],
-      { r: 'rock1', D: 'teal3', d: 'teal2', L: 'bone2', S: 'mauve3', w: night ? 'glow3' : 'mauve2' }
-    );
-    p.sprite(leg, c.leg, CY - 8, { glow: night ? 'w' : false });
-    if (night) {
-      // floodlit dome
-      p.px(c.leg + 4, CY - 6, 'cream3', true), p.px(c.leg + 4, CY - 5, 'cream2', true);
-      p.px(c.leg + 3, CY - 5, 'cream2', true);
+    /* downtown: a hazy back row first, then the named towers */
+    for (let x = c.dt[0] - 1; x < c.dt[1] + 1; x += 3) {
+      const h = 5 + Math.floor(hash(x, 173) * 6);
+      for (let y = CY - h; y <= CY; y++)
+        for (let i = 0; i < 3; i++) {
+          p.px(x + i, y, i === 2 ? 'haze0' : 'haze1');
+          if ((y - CY) % 2 === 0 && i < 2) cityLights(p, x + i, y, 179);
+        }
+    }
+    for (const [name, dx, w, h] of c.towers) {
+      if (name === 'stantec') stantec(p, c.dt[0] + dx, w, h);
+      else tower(p, c.dt[0] + dx, w, h, name);
+    }
+    legislature(p, c.leg, c.lw, night);
+    if (c.mac) hotelMac(p, c.mac[0], c.mac[1] - c.mac[0], night);
+
+    /* the wooded north bank, in front of the bases so the city stands on the ground */
+    for (let x = b1 + 3; x < c.x1 + 3; x++) {
+      if (hash(x, 205) > 0.45) p.px(x, CY, hash(x, 206) > 0.5 ? 'spruce2' : 'grass2');
+      p.px(x, CY + 1, dither(x, CY + 1, 0.4) ? 'spruce1' : 'spruce2');
     }
 
-    /* downtown towers */
-    for (const [x, w, h, back] of c.towers) {
-      const top = CY - h;
-      const style = Math.floor(hash(x, 182) * 3); // window bands, mullions or a grid
-      const crown = Math.floor(hash(x, 177) * 3); // flat, stepped or slanted
-      for (let y = top; y <= CY; y++)
-        for (let i = 0; i < w; i++) {
-          const r = y - top;
-          if (crown === 1 && r === 0 && w > 3 && (i === 0 || i === w - 1)) continue;
-          if (crown === 2 && r < w - 2 && i > r + 1) continue;
-          let name = back ? (i === w - 1 ? 'haze0' : 'haze1') : i === 0 ? 'rock4' : i === w - 1 ? 'rock2' : 'rock3';
-          const win =
-            !back && i > 0 && r > 0 && y < CY - 1 && (style === 0 ? r % 2 === 1 : style === 1 ? i % 2 === 0 : r % 2 === 1 && i % 2 === 1);
-          if (win) name = i === w - 1 ? 'rock1' : 'rock2';
-          p.px(x + i, y, name);
-          if (win) cityLights(p, x + i, y, 178);
-          if (back && r % 2 === 1 && i < w - 1) cityLights(p, x + i, y, 179);
-        }
-      if (!back && h > 11 && hash(x, 180) > 0.4) p.px(x + 1, top - 1, 'rock2'); // rooftop mast
-    }
-    /* Stantec Tower: the tallest, slim, with a pointed top */
-    const s = c.stantec;
-    const sh = c.phone ? 20 : 24;
-    for (let y = CY - sh; y <= CY; y++) {
-      const r = y - (CY - sh);
-      const w = r < 1 ? 1 : r < 3 ? 2 : r < 5 ? 3 : 4;
-      for (let i = 0; i < w; i++) {
-        let name = i === 0 ? 'snow2' : i === w - 1 ? 'rock2' : 'rock4';
-        if (r > 6 && r % 3 === 0 && i > 0) name = i === w - 1 ? 'rock1' : 'rock3';
-        p.px(s + i + (r < 5 ? 0 : 0), y, name);
-        if (r > 6 && r % 3 === 1 && i > 0) cityLights(p, s + i, y, 181);
+    /* Walterdale Bridge: a white arch over the river */
+    if (c.walter) {
+      const [w0, w1] = c.walter;
+      const wm = (w0 + w1) / 2;
+      for (let x = w0; x <= w1; x++) {
+        p.px(x, CY + 2, 'stone1'); // deck
+        const a = CY + 1 - Math.round(3 * (1 - Math.pow((x - wm) / ((w1 - w0) / 2), 2)));
+        p.px(x, a, x < wm ? 'birch4' : 'birch3', night);
+        if ((x - w0) % 2 === 0 && a < CY + 1) for (let y = a + 1; y <= CY + 1; y++) p.px(x, y, 'birch2'); // hangers
       }
     }
-    p.px(s, CY - sh - 1, 'rock2'), p.px(s, CY - sh - 2, 'rock2'); // spire
 
-    /* Muttart Conservatory: four glass pyramids on the valley floor, lit in colour at night */
-    const pyr = c.phone
-      ? [[0, 4], [5, 5], [11, 3]]
-      : [[0, 5], [6, 6], [13, 4], [18, 4]];
+    /* Muttart Conservatory: glass pyramids on the valley floor, lit in colour at night */
+    const pyr = c.tier === 0 ? [[0, 3], [4, 4], [9, 3]] : [[0, 4], [5, 5], [11, 3], [15, 3]];
     const lit = ['aurora2', 'rose3', 'glow3', 'aurora5'];
     const base = CY + 4;
     pyr.forEach(([dx, h], k) => {
@@ -883,9 +1044,12 @@
 
   /* ---------------- foreground ---------------- */
   function wheatRow(p, x0, x1, t) {
-    for (let x = Math.max(p.x0, Math.floor(x0)); x < Math.min(p.x1, x1); x++) {
-      for (let y = 66; y < H; y++) p.px(x, y, dither(x, y, 0.5) ? 'gold2' : 'gold1');
-      const h = 5 + Math.floor(hash(x, 7) * 4);
+    // the crop thins out into its neighbours over a seam at each end
+    const inside = (x, y) => past(x, y, x0) && !past(x, y, x1);
+    for (let x = Math.max(p.x0, Math.floor(x0 - SEAM)); x < Math.min(p.x1, x1 + SEAM); x++) {
+      for (let y = 66; y < H; y++) if (inside(x, y)) p.px(x, y, dither(x, y, 0.5) ? 'gold2' : 'gold1');
+      if (!inside(x, H - 1)) continue;
+      const h = 5 + Math.floor(hash(x, 7) * 4) - (inside(x, H - 4) ? 0 : 2); // shorter at the edge
       const wave = Math.sin(x * 0.11 - t * 2.1) + 0.6 * Math.sin(x * 0.29 - t * 1.25);
       const lean = wave > 0.95 ? 1 : wave < -1.1 ? -1 : 0;
       const crest = wave > 0.8;
@@ -900,9 +1064,12 @@
     }
   }
 
-  function grassRow(p, x0, x1, t, ramp, y0) {
-    for (let x = Math.max(p.x0, Math.floor(x0)); x < Math.min(p.x1, x1); x++) {
-      if (hash(x, 131) > 0.55) continue;
+  // grass blades from x0 to x1: spruce-dark in the forest, parkland green past the seam at `to`,
+  // thinning out into the wheat past the seam at x1
+  function grassRow(p, x0, x1, t, to, y0) {
+    for (let x = Math.max(p.x0, Math.floor(x0)); x < Math.min(p.x1, x1 + SEAM); x++) {
+      if (hash(x, 131) > 0.55 || past(x, y0, x1)) continue;
+      const ramp = past(x, y0 - 1, to) ? 'grass' : 'spruce';
       const h = 1 + Math.floor(hash(x, 132) * 3);
       const lean = Math.sin(x * 0.15 - t * 1.6) > 0.85 ? 1 : 0;
       for (let r = 0; r < h; r++) p.px(x + (r === h - 1 ? lean : 0), y0 - r, r === h - 1 ? ramp + 4 : ramp + 3);
@@ -1256,11 +1423,11 @@
     }
     for (let x = z.mtn[1] - 4; x < z.boreal[1]; x += 2 + Math.floor(hash(x, 144) * 3)) {
       if (Math.abs(x - portal.x + 1) < 4) continue; // keep the tunnel mouth in view
-      if (x > city.x0 && x < city.x1) continue;
+      if (x > city.x0 - 5 && x < city.x1) continue; // keep the skyline in view
       if (blocked(x, 2)) continue;
       trees.push({ kind: 's', x, base: GY + 2 + Math.floor(hash(x, 145) * 9), h: 12 + Math.floor(hash(x, 146) * 12) });
     }
-    const core = [city.leg - 2, city.dt[1] + 1];
+    const core = [city.leg - 2, city.x1 + 1];
     for (let x = z.park[0] + 2; x < z.park[1] + z.prairie[2] * 0.08; x += 5 + Math.floor(hash(x, 147) * 6)) {
       if (x < portal.x + 7) continue; // keep the tunnel mouth in view
       const base = GY + 3 + Math.floor(hash(x, 150) * 8);
@@ -1310,7 +1477,7 @@
         p.px(gx, gy, p.night ? 'water3' : 'water5'), p.px(gx + 1, gy, p.night ? 'water2' : 'water4');
       }
       // Stantec Tower's beacon
-      if (Math.floor(t * 10) % 20 < 3) p.px(city.stantec, CY - (phone ? 20 : 24) - 3, 'barn5', true);
+      if (Math.floor(t * 10) % 20 < 3) p.px(city.beacon[0], city.beacon[1], 'barn5', true);
       train(p, portal, W, t);
       for (const tr of trees) {
         if (tr.kind === 's') spruce(p, tr.x, tr.base, tr.h, t, tr.x * 0.7);
@@ -1322,8 +1489,7 @@
       elevator(p, place.elevator, GY + 1);
       if (roomy) pumpjack(p, place.pump, GY + 7, t);
       smoke(p, hs.chimney[0], hs.chimney[1], t);
-      grassRow(p, 0, z.park[0], t, 'spruce', H - 1);
-      grassRow(p, z.park[0], P[0], t, 'grass', H - 1);
+      grassRow(p, 0, P[0], t, z.park[0], H - 1);
       wheatRow(p, P[0], P[1], t);
       birds(p, W, t);
       overBoxes(p);
@@ -1412,10 +1578,9 @@
 
     const icons = iconRow ? [...iconRow.querySelectorAll('#mode-toggle, a')] : [];
     const isPost = !!document.querySelector('main article[data-toc], .post-tail-wrapper');
-    // the band is fixed to the window. Other pages: the content fades out above it.
-    // Posts: the article column is cut out of the band, so text never runs over the art.
-    root.classList.add('px-ground-fixed');
-    if (isPost) root.classList.add('px-ground-post');
+    // Posts: the band is fixed to the window and the article column is cut out of it, so text never
+    // runs over the art. Other pages: the band sits at the end of the page, below the content.
+    if (isPost) root.classList.add('px-ground-fixed', 'px-ground-post');
     const article = isPost ? document.querySelector('main') : null;
     const panel = isPost ? document.getElementById('panel-wrapper') : null;
     // the cut-out runs from the sidebar's edge to the contents column (or to the window edge when
@@ -1424,14 +1589,12 @@
       const r = panel && panel.offsetWidth && getComputedStyle(panel).display !== 'none' ? panel.getBoundingClientRect() : null;
       return r ? r.left : window.innerWidth;
     };
-    const content = document.querySelector('#main-wrapper > .container');
 
     let scene = null;
     let painter = null;
     let s = 3;
     let sideW = 0; // world columns under the sidebar
     let g0 = 0; // first world column of the ground band
-    let away = false;
     let groundSeen = true;
 
     function rebuild() {
@@ -1506,7 +1669,7 @@
 
     function tick(t) {
       if (!scene) return;
-      const groundOn = groundSeen && !away;
+      const groundOn = groundSeen;
       const x1 = groundOn ? scene.W : sideW;
       if (!x1) return;
       painter.clip(0, x1);
@@ -1522,20 +1685,15 @@
       if (groundSeen) ctl.redraw();
     }).observe(groundWrap);
 
-    // the content fades out where it meets the band (fixed band only)
+    // posts: keep the cut-out on the sidebar line and the contents-column line
     function updateFade() {
-      if (article) {
-        const w = groundWrap.getBoundingClientRect();
-        const side = sidebar && window.innerWidth >= 850 ? sidebar.getBoundingClientRect().right : 0;
-        groundWrap.style.setProperty('--px-hole-l', Math.round(side - w.left) + 'px');
-        groundWrap.style.setProperty('--px-hole-r', Math.round(holeRight() - w.left) + 'px');
-        return;
-      }
-      if (!content) return;
-      const bandH = parseFloat(root.style.getPropertyValue('--px-ground-h')) || H * s;
-      const y = window.innerHeight - bandH + 18 * s - content.getBoundingClientRect().top;
-      content.style.setProperty('--px-fade-y', Math.round(y) + 'px');
+      if (!article) return;
+      const w = groundWrap.getBoundingClientRect();
+      const side = sidebar && window.innerWidth >= 850 ? sidebar.getBoundingClientRect().right : 0;
+      groundWrap.style.setProperty('--px-hole-l', Math.round(side - w.left) + 'px');
+      groundWrap.style.setProperty('--px-hole-r', Math.round(holeRight() - w.left) + 'px');
     }
+
     {
       let fadeQueued = false;
       window.addEventListener(
@@ -1551,30 +1709,6 @@
         { passive: true }
       );
       updateFade();
-    }
-
-    // (posts used to slide the band away while reading; it now lives at the page end instead)
-    function setAway(v) {
-      if (v === away) return;
-      away = v;
-      groundWrap.classList.toggle('is-away', v);
-      root.classList.toggle('px-ground-away', v);
-      if (!v) ctl.redraw();
-    }
-    let scrollQueued = false;
-    function onScroll() {
-      if (scrollQueued) return;
-      scrollQueued = true;
-      requestAnimationFrame(() => {
-        scrollQueued = false;
-        const y = window.scrollY || root.scrollTop;
-        const end = root.scrollHeight - window.innerHeight;
-        setAway(false && y < end);
-      });
-    }
-    if (isPost) {
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
     }
 
     // hover lights the marker under an icon

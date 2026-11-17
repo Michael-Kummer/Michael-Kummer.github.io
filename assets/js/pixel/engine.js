@@ -23,23 +23,13 @@
     mauve: ['#33263a', '#524055', '#776174', '#9f8994', '#c4b2b4'],
     water: ['#0c2d42', '#125366', '#1a8189', '#36aea8', '#7ddbca', '#d1fff0'],
     metal: ['#1b1e28', '#2f3546', '#4a5369', '#727d97', '#a7b1c6', '#e1e7f1'],
-    denim: ['#131a31', '#202d55', '#31467f', '#4d6aaa', '#7a96cf'],
-    purple: ['#21122c', '#3a1f4f', '#583273', '#7d4c97', '#a573ba'],
     teal: ['#0e2a2d', '#174a4a', '#22706a', '#36978a', '#64c2ad'],
-    skin: ['#3b1e16', '#6b3925', '#a6623e', '#d79365', '#f2c59a', '#fde4c6'],
-    skinB: ['#28150f', '#48291b', '#77482f', '#a26c46', '#c99266', '#e2b98d'],
-    hairBrown: ['#1f120c', '#3a2215', '#5c381f', '#83542d', '#a8774a'],
-    hairGrey: ['#3f3b47', '#6e6a78', '#a19dab', '#cfccd6', '#f0eef4'],
-    hairBlack: ['#100c15', '#1e1726', '#2f2539', '#43374f', '#5c4d68'],
-    hairGinger: ['#43170b', '#722b11', '#a8491c', '#d47233', '#f09d5b'],
-    hivis: ['#521a06', '#9a3609', '#de5d0e', '#ff8c2b', '#ffbf78'],
     hat: ['#563605', '#9d6b0b', '#dca119', '#ffc629', '#ffe58c'],
     sky: ['#4673c2', '#6290d6', '#82afe6', '#a6ccf0', '#cbe4f7', '#e6f3fb'],
     night: ['#08081a', '#11112d', '#1a1a42', '#262658', '#36336d', '#4e4386', '#6c579b'],
     aurora: ['#16584c', '#25977a', '#53d39b', '#a3f5c4', '#6a3f9f', '#9e6ccc'],
     glow: ['#6d2b0e', '#c4621b', '#f59a32', '#ffcb69', '#ffeaa8', '#fffbe6'],
     screen: ['#0c2a33', '#11545e', '#1f8c8c', '#4fd0b8', '#b6fbe0'],
-    owl: ['#3a2819', '#523b28', '#6b4f36', '#8a6a4b', '#a8875f', '#c4a57a'],
     cream: ['#a9977b', '#cfc0a2', '#e8dcc2', '#f6eedc', '#fffaf0'],
     bone: ['#6c6252', '#a2967f', '#cfc4ab', '#ece4cf', '#fffbef'],
     rose: ['#5e1838', '#9a3160', '#d45f8c', '#f79bbd', '#ffd3e2'],
@@ -280,220 +270,6 @@
     }
   }
 
-  /* ---------- Character rig (docs/pixel-art.md, Characters) ---------- */
-  // Facing right. Roles: skin, hair, shirt, pants, shoe. 'o' is the ink outline.
-  const HEAD = sprite(
-    [
-      '..oooooo..',
-      '.o@@@@@@o.',
-      'o@@@@@@@@o',
-      'o@@@@@@@@o',
-      'o@@@@@@@@o',
-      'o@@@@@@@@o',
-      '.o@@@@@@o.',
-      '..oooooo..',
-    ],
-    { o: 'ink0', '@': '@skin3' }
-  );
-  // the face is drawn on top of HEAD
-  const FACE = sprite(
-    [
-      '..........',
-      '..........',
-      '..........',
-      '.....e.e..',
-      '..s..e.e.n',
-      '..s.......',
-      '......m...',
-      '..........',
-    ],
-    { s: '@skin2', e: 'ink0', m: '@skin1', n: '@skin3' }
-  );
-  const HAIRS = {
-    short: sprite(
-      ['..hhhhhh..', '.hHHHHHHh.', 'hHHHHHHHHh', 'hHHh......', 'hHh.......', 'hh........'],
-      { h: '@hair1', H: '@hair3' }
-    ),
-    long: sprite(
-      [
-        '..hhhhhh..',
-        '.hHHHHHHh.',
-        'hHHHHHHHhh',
-        'hHHHh.....',
-        'hHHh......',
-        'hHHh......',
-        'hHHh......',
-        '.hHh......',
-        '.hh.......',
-      ],
-      { h: '@hair1', H: '@hair3' }
-    ),
-    bun: sprite(
-      [
-        'hhh.......',
-        'hHhhhhhh..',
-        'hhHHHHHHh.',
-        'hHHHHHHhhh',
-        'hHHh......',
-        'hHh.......',
-        'hh........',
-      ],
-      { h: '@hair1', H: '@hair3' }
-    ),
-    bald: sprite(['..........', '..........', '..........', 'hh........', 'hh........'], { h: '@hair2' }),
-    hood: sprite(
-      [
-        '..oooooo..',
-        '.oCCCCCCo.',
-        'oCCccccCCo',
-        'oCc.....Co',
-        'oCc......o',
-        'oCc......o',
-        'oCCc....o.',
-        '.oooooo...',
-      ],
-      { o: 'ink0', C: '@shirt2', c: '@shirt1' }
-    ),
-  };
-  const HATS = {
-    hardhat: sprite(
-      ['...oooo...', '..oYYYYo..', '.oYyYYYYo.', 'oYYyYYYYYo', 'ooooooooooo'],
-      { o: 'ink0', Y: 'hat3', y: 'hat4' }
-    ),
-  };
-
-  /**
-   * A person about 20px tall, standing at (x, y) = top-left of the head, facing right unless flip.
-   * pose: 'stand' | 'walk' | 'hammer' | 'type' | 'carry' | 'sit' | 'phone' | 'reach' | 'wave'
-   * frame: animation step. look: { hair, hat, vest, skin, hairRamp, shirt, pants, shoe, glasses }
-   */
-  function person(p, x, y, look, pose = 'stand', frame = 0, flip = false) {
-    const roles = {
-      skin: look.skin || 'skin',
-      hair: look.hairRamp || 'hairBrown',
-      shirt: look.shirt || 'denim',
-      pants: look.pants || 'denim',
-      shoe: look.shoe || 'bark',
-      vest: 'hivis',
-    };
-    const f = frame;
-    const X = (i, w = 1) => (flip ? x + 9 - i - (w - 1) : x + i); // mirror inside a 10px box
-    const P = (i, j, name) => p.px(X(i), y + j, name);
-    const R = (i, j, w, h, name) => {
-      for (let b = 0; b < h; b++) for (let a = 0; a < w; a++) P(i + a, j + b, name);
-    };
-    const c = (role, k) => roles[role] + k;
-    const sitting = pose === 'sit' || pose === 'phone';
-    const bob = pose === 'walk' && f % 2 ? 1 : 0;
-    const hy = y + bob;
-
-    /* legs (rows 14..19) */
-    if (sitting) {
-      // thighs forward, shins down
-      R(3, 15, 6, 2, c('pants', 2));
-      R(3, 15, 6, 1, c('pants', 3));
-      R(7, 17, 2, 2, c('pants', 2));
-      R(7, 19, 3, 1, c('shoe', 1));
-    } else {
-      const step = pose === 'walk' ? [0, 1, 0, -1][f % 4] : 0;
-      // back leg
-      R(3 - step, 14, 2, 5, c('pants', 1));
-      R(3 - step, 19, 3, 1, c('shoe', 1));
-      // front leg
-      R(5 + step, 14, 2, 5, c('pants', 3));
-      R(5 + step, 14, 1, 5, c('pants', 2));
-      R(5 + step, 19, 3, 1, c('shoe', 2));
-    }
-
-    /* torso (rows 8..14) */
-    const ty = hy + 8;
-    for (let j = 0; j < 7; j++) {
-      for (let i = 2; i < 8; i++) {
-        const edge = i === 2 || i === 7;
-        let name = edge ? 'ink0' : i < 4 ? c('shirt', 3) : i < 6 ? c('shirt', 2) : c('shirt', 1);
-        if (look.vest && i >= 3 && i <= 6) name = j === 3 ? 'metal5' : i === 3 ? 'hivis4' : 'hivis3';
-        if (j === 6 && !edge) name = c('pants', 2); // belt line
-        p.px(X(i), ty + j, name);
-      }
-    }
-    if (look.apron) for (let j = 1; j < 7; j++) P(5, ty - y + j, 'cream3'), P(6, ty - y + j, 'cream2');
-
-    /* head (rows 0..7) */
-    const blink = look.blink;
-    p.sprite(HEAD, x, hy, { roles, flip });
-    if (!blink) p.sprite(FACE, x, hy, { roles, flip });
-    else {
-      p.sprite(FACE, x, hy, { roles, flip });
-      p.px(X(5), hy + 3, c('skin', 3)), p.px(X(7), hy + 3, c('skin', 3));
-    }
-    if (look.glasses) {
-      // thin wire frames: a glint beside each eye and a bridge between them
-      p.px(X(4), hy + 3, 'metal5'), p.px(X(6), hy + 3, 'metal2'), p.px(X(8), hy + 3, 'metal5');
-    }
-    const hair = HAIRS[look.hair || 'short'];
-    if (hair) p.sprite(hair, x, hy - (look.hair === 'bun' ? 1 : 0), { roles, flip });
-    if (look.hat) p.sprite(HATS[look.hat], flip ? x - 1 : x, hy - 2, { roles, flip });
-
-    /* arms */
-    const arm = (i, j, name) => p.px(X(i), ty + j, name);
-    const hand = (i, j) => arm(i, j, c('skin', 3));
-    const sleeve = c('shirt', 2);
-    switch (pose) {
-      case 'hammer': {
-        // arm raised (f 0,1) then struck down (f 2,3)
-        const up = f % 4 < 2;
-        if (up) {
-          arm(8, 1, sleeve), arm(9, 0, sleeve), arm(10, -1, sleeve), hand(10, -2);
-          arm(10, -3, 'bark3'), arm(10, -4, 'bark3');
-          arm(9, -5, 'metal4'), arm(10, -5, 'metal3'), arm(11, -5, 'metal2'), arm(10, -6, 'ink0');
-        } else {
-          arm(8, 2, sleeve), arm(9, 2, sleeve), hand(10, 2);
-          arm(11, 2, 'bark3'), arm(12, 2, 'bark3');
-          arm(13, 1, 'metal4'), arm(13, 2, 'metal3'), arm(13, 3, 'metal2');
-        }
-        arm(1, 2, c('shirt', 1)), arm(1, 3, c('shirt', 1)), hand(1, 4);
-        break;
-      }
-      case 'type': {
-        const k = f % 2;
-        arm(7, 2, sleeve), arm(8, 3, sleeve), hand(9, 3 + k);
-        arm(1, 2, c('shirt', 1)), hand(9 - 1, 4 - k);
-        break;
-      }
-      case 'carry': {
-        arm(7, 2, sleeve), arm(8, 3, sleeve), hand(9, 3);
-        break;
-      }
-      case 'reach': {
-        // both arms forward, holding something at (9..10, 4)
-        arm(7, 2, sleeve), arm(8, 3, sleeve), hand(9, 3);
-        arm(1, 2, c('shirt', 1)), arm(1, 3, c('shirt', 1)), hand(1, 4);
-        break;
-      }
-      case 'phone': {
-        arm(7, 2, sleeve), arm(8, 1, sleeve), hand(8, 0);
-        p.px(X(8), ty - 1, 'metal1'), p.px(X(8), ty - 2, 'metal1'), p.px(X(7), ty - 2, 'metal2');
-        break;
-      }
-      case 'wave': {
-        const k = f % 2;
-        arm(7, 0, sleeve), arm(8, -1, sleeve), hand(8 + k, -2);
-        arm(1, 2, c('shirt', 1)), arm(1, 3, c('shirt', 1)), hand(1, 4);
-        break;
-      }
-      case 'walk': {
-        const s = [0, 1, 0, -1][f % 4];
-        arm(1 + (s > 0 ? 1 : 0), 2, c('shirt', 1)), hand(1 - s, 4);
-        arm(7, 2, sleeve), hand(7 + s, 4);
-        break;
-      }
-      default:
-        arm(1, 2, c('shirt', 1)), arm(1, 3, c('shirt', 1)), hand(1, 4);
-        arm(8, 2, sleeve), arm(8, 3, sleeve), hand(8, 4);
-    }
-
-  }
-
   /* ---------- Runtime: mounting canvases, mode, motion, visibility ---------- */
   const env = typeof window !== 'undefined' && typeof document !== 'undefined';
 
@@ -570,7 +346,6 @@
     COLORS,
     Painter,
     sprite,
-    person,
     dither,
     hash,
     noise1,

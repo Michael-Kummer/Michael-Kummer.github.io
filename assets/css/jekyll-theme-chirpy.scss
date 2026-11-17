@@ -259,14 +259,15 @@ html {
 }
 
 /* Pixel art: ground and sidebar */
-// The landscape band is fixed to the bottom of the viewport, right of the sidebar, and the sidebar
-// strip is fixed at the same height, so they meet as one picture. prairie.js sets the sizes:
+// The landscape band runs along the bottom, right of the sidebar: fixed to the window on posts, at
+// the end of the page elsewhere. The sidebar strip is fixed at the same height, so at the page end
+// they meet as one picture. prairie.js sets the sizes:
 // --px-ground-h (band height), --px-ground-left (band start, on the art grid), --px-side-w.
-// The band is a background: the page content stacks above it and cards pass over it.
+// The band is a background: the page content stacks above it.
 html.has-px-ground {
   #main-wrapper {
     z-index: 1; // above the band (it is already position: relative)
-    padding-bottom: var(--px-ground-h, 216px);
+    padding-bottom: calc(var(--px-ground-h, 216px) + 1.5rem); // the band, plus a gap above it
     // the wrapper's empty box must not swallow clicks meant for the sign link under it
     pointer-events: none;
 
@@ -275,7 +276,7 @@ html.has-px-ground {
     }
 
     > .container {
-      min-height: calc(100vh - var(--px-ground-h, 216px));
+      min-height: calc(100vh - var(--px-ground-h, 216px) - 1.5rem);
     }
   }
 
@@ -284,7 +285,8 @@ html.has-px-ground {
     padding-bottom: var(--px-ground-h, 216px);
   }
 
-  &.px-ground-fixed #back-to-top {
+  // kept above the band, so it never sits on the art at the page end
+  #back-to-top {
     bottom: calc(var(--px-ground-h, 216px) + 1rem);
   }
 }
@@ -303,11 +305,17 @@ html.px-ground-post .px-scene--ground {
   mask-image: linear-gradient(to right, #000 var(--px-hole-l, 0px), transparent var(--px-hole-l, 0px), transparent var(--px-hole-r, 0px), #000 var(--px-hole-r, 0px));
 }
 
-// other pages: the content fades out just above the band's horizon. prairie.js keeps
-// --px-fade-y (in the container's own coordinates) at the band's top as the page scrolls.
-html.px-ground-fixed:not(.px-ground-post) #main-wrapper > .container {
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--px-fade-y, 200vh) - 90px), transparent var(--px-fade-y, 200vh));
-  mask-image: linear-gradient(to bottom, #000 calc(var(--px-fade-y, 200vh) - 90px), transparent var(--px-fade-y, 200vh));
+// other pages: the band is not fixed; it sits at the end of the page, under the content (the
+// wrapper's bottom padding leaves it room), and at the window bottom when the page is short
+html.has-px-ground:not(.px-ground-fixed) {
+  body {
+    position: relative;
+    min-height: 100vh;
+  }
+
+  .px-scene--ground {
+    position: absolute;
+  }
 }
 
 .px-scene--ground {
@@ -319,8 +327,7 @@ html.px-ground-fixed:not(.px-ground-post) #main-wrapper > .container {
   z-index: 0;
   transition: transform 0.35s ease;
 
-  // reading comes first: slides away while reading a post, and while the phone drawer is open
-  &.is-away,
+  // slides away while the phone drawer is open
   [sidebar-display] & {
     transform: translateY(100%);
   }

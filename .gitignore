@@ -1,0 +1,5 @@
+# scratch space for local checks (venv, scripts, screenshots, notes)
+_tmp/
+# local build cache and local editor settings
+.jekyll-cache/
+.claude/settings.local.json
