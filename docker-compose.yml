@@ -2,6 +2,9 @@ services:
   site:
     image: ruby:3.2
     working_dir: /srv
+    # build like GitHub Pages does, so localhost matches the live site
+    environment:
+      - JEKYLL_ENV=production
     command: >
       bash -c "git config --global --add safe.directory /srv
       && bundle install
