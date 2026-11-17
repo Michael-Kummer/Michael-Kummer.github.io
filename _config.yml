@@ -16,7 +16,7 @@ timezone: America/Edmonton
 
 title: Michael # the main title
 
-tagline: Data Scientist | Economics & Behavioral Science | Python · SQL · ML # it will display as the subtitle
+tagline: Data Scientist | Economics & Healthcare Data | Python · SQL · ML # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Data analysis and economic insights | Technical tutorials and project documentation | Exploring the intersection of statistics and technology
@@ -138,7 +138,7 @@ assets:
     env: # [development | production]
 
 pwa:
-  enabled: true # The option for PWA feature (installable)
+  enabled: false
   cache:
     enabled: true # The option for PWA offline cache
     # Paths defined here will be excluded from the PWA cache.
@@ -215,6 +215,8 @@ exclude:
   - purgecss.js
   - rollup.config.js
   - "package*.json"
+  - docker-compose.yml
+  - CHART_PLAN.md
 
 # jekyll-archives:
 #   enabled: [categories, tags]

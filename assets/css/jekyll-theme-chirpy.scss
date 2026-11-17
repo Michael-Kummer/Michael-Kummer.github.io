@@ -1,0 +1,254 @@
+---
+---
+
+@use 'main';
+
+/* Search: not needed with three posts */
+#search-trigger,
+#search,
+#search-cancel {
+  display: none !important;
+}
+
+/* "Recently Updated": repeats the post list */
+#panel-wrapper .access {
+  display: none;
+}
+
+/* Post pages: author + reading time, licence + share, "Further Reading",
+   and the card description Chirpy repeats under the title */
+article .post-meta > .d-flex,
+.post-tail-bottom,
+#related-posts,
+.post-desc {
+  display: none !important;
+}
+
+/* Right column: only kept where it holds the table of contents */
+@media (min-width: 1200px) {
+  /* :has() can't be nested, so test from #main-wrapper down */
+  #main-wrapper:not(:has(#toc-wrapper)) {
+    #panel-wrapper {
+      display: none;
+    }
+
+    main,
+    #tail-wrapper {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+/* Sidebar tagline: fit "Python · SQL · ML" on one line instead of orphaning "· ML" */
+#sidebar .profile-wrapper {
+  padding-right: 0.5rem;
+}
+
+#sidebar .site-subtitle {
+  font-size: 14px;
+  word-spacing: 0;
+}
+
+/* "Home" breadcrumb: the sidebar already links home */
+#breadcrumb {
+  display: none !important;
+}
+
+/* Footer: theme credit */
+footer p:last-child {
+  display: none;
+}
+
+/* Link hover: Chirpy hard-codes orange */
+.content a:not(.img-link, .btn):hover,
+footer a:hover {
+  color: var(--link-color) !important;
+  border-bottom-color: var(--link-color) !important;
+}
+
+/* Neutral greys only: no blue or teal anywhere */
+@mixin accent-light {
+  --link-color: #2a2a2a;
+  --toc-highlight: #2a2a2a;
+  --card-bg: #efefef;
+  --sidebar-bg: #f7f7f7;
+  --sidebar-hover-bg: #e9e9e9;
+  --link-underline-color: #d9d9d9;
+}
+
+@mixin accent-dark {
+  --main-bg: #1b1b1b;
+  --topbar-bg: rgb(27, 27, 27, 0.64);
+  --link-color: #d6d6d6;
+  --toc-highlight: #d6d6d6;
+  --card-bg: #262626;
+  --link-underline-color: #555555;
+}
+
+html {
+  @media (prefers-color-scheme: light) {
+    &:not([data-mode]),
+    &[data-mode='light'] {
+      @include accent-light;
+    }
+
+    &[data-mode='dark'] {
+      @include accent-dark;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:not([data-mode]),
+    &[data-mode='dark'] {
+      @include accent-dark;
+    }
+
+    &[data-mode='light'] {
+      @include accent-light;
+    }
+  }
+}
+
+#post-list .card-wrapper.card {
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Resume button: neutral instead of Bootstrap blue */
+.content .btn-primary {
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    background: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    color: var(--main-bg) !important;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+/* Cards: cap the width so short titles and descriptions don't float in empty space */
+#post-list {
+  max-width: 720px;
+}
+
+/* Charts: one frame for every embedded chart (_includes/chart.html) */
+.chart {
+  height: var(--h);
+  margin: 1.5rem 0;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    /* match the chart documents' scheme so the browser doesn't paint a white backdrop in dark mode */
+    color-scheme: light;
+  }
+
+  @media (max-width: 768px) {
+    height: calc(var(--h) * 0.75);
+  }
+}
+
+/* Static chart PNGs have opaque white backgrounds */
+.content img[src*='/postImages/'] {
+  border-radius: 8px;
+}
+
+/* Dark mode for those PNGs: 'dim' (A1) or 'invert' (A2) */
+$png-dark: 'invert';
+
+@mixin png-dark {
+  /* .light/.dark images already match the mode (Chirpy puts the class on the wrapping link) */
+  .content :not(.light, .dark) > img[src*='/postImages/'] {
+    @if $png-dark == 'invert' {
+      filter: invert(1) hue-rotate(180deg);
+    } @else {
+      filter: brightness(0.85);
+    }
+  }
+}
+
+html {
+  @media (prefers-color-scheme: light) {
+    &[data-mode='dark'] {
+      @include png-dark;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:not([data-mode]),
+    &[data-mode='dark'] {
+      @include png-dark;
+    }
+  }
+}
+
+/* Post videos (_includes/clip.html) */
+.clip {
+  position: relative;
+  margin: 1.5rem 0;
+
+  video {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}
+
+/* Large play button over the poster; hidden while the clip plays */
+.clip__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.4rem 1.8rem;
+  border: 0;
+  border-radius: 16px;
+  background: rgb(27 27 27 / 0.78);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+
+  &:hover {
+    background: rgb(27 27 27 / 0.9);
+  }
+
+  .is-playing & {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* CSS play triangle */
+.clip__icon {
+  width: 0;
+  height: 0;
+  margin-left: 0.4rem;
+  border-style: solid;
+  border-width: 1.1rem 0 1.1rem 1.9rem;
+  border-color: transparent transparent transparent #fff;
+}
+
+/* Mermaid: replace the default lavender nodes with the card grey */
+.mermaid .node {
+  rect,
+  polygon,
+  circle,
+  path {
+    fill: var(--card-bg) !important;
+    stroke: #888 !important;
+  }
+}

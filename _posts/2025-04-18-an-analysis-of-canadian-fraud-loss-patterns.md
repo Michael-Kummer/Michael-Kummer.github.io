@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'An Analysis of Canadian Fraud Loss Patterns'
+description: How senior status and gender relate to dollars lost per scam in Canada.
 date: 2025-04-18 14:04 -0600
+last_modified_at: 2025-07-01
 math: True
 ---
 Note: This was a successful submission for an SOA Call for Essays where it will be copyedited then published to their website. This was also a final paper for BUEC 420: Data Analysis in Business Economics.
@@ -30,10 +32,10 @@ Analysis Data = Victim ∩ Non-Zero Loss ∩ Not Anonymized/Missing
 
 Small categories with few observations were combined or removed. For the methodology used, mail, television, video call, print, and radio were combined into an "other" category as these methods ranged from 80 to 3 observations in respective order. For scam categories, those below 200 observations were combined as the number of observations becomes a limitation to understanding their representation of the greater Canadian population.
 
-![[ScamCategories.png]]({{'/assets/postImages/post2/ScamCategories.png' | relative_url}})
+![Top scam categories by frequency and dollar loss, seniors vs non-seniors]({{'/assets/postImages/post2/ScamCategories.png' | relative_url}})
 *Figure 1: Comparison between the Top 6 scams in frequency and their respective dollar loss for seniors vs non-seniors.*
 
-![[SolicitMethods.png]]({{'/assets/postImages/post2/SolicitMethods.png' | relative_url}})
+![Top solicitation methods by frequency and dollar loss, seniors vs non-seniors]({{'/assets/postImages/post2/SolicitMethods.png' | relative_url}})
 *Figure 2: Comparison between the Top 5 methods in frequency and their respective dollar loss for seniors vs non-seniors.*
 
 ### 3.1 Models
@@ -87,7 +89,7 @@ Note: The table's reference category is Emergency Fraud, and the reference solic
 Note: The table's reference category is Emergency Fraud, and the reference solicit method is direct call.
 *p<0.1; **p<0.05; ***p<0.01
 
-![[GenderSeniorityComparison.png]]({{'/assets/postImages/post2/GenderSeniorityComparison.png' | relative_url}})
+![Gender and seniority in investment and romance scams]({{'/assets/postImages/post2/GenderSeniorityComparison.png' | relative_url}})
 *Figure 5: Comparison of frequency of gender and seniority status in investment and romance scams*
 
 For romance scams, females will lose more than males, especially females who are non-seniors. Previous American research aligns with this, but specific research has shown that educated women who score high in risk-taking are specifically the most vulnerable to this type of scam.[^4] Results here show that females were both scammed for more money and were scammed more times than males. Women who are not seniors are scammed more often, but female senior women are scammed for more per scam.
@@ -114,7 +116,7 @@ Investment and recovery scams tend to cause male victims to lose more, with seni
 Note: The table's reference category is Emergency Fraud, and the reference solicitation method is direct call. Other was significant, but Other X Male and Other X Senior were not.
 *p<0.1; **p<0.05; ***p<0.01
 
-![[MethodComparison.png]]({{'/assets/postImages/post2/MethodComparison.png' | relative_url}})
+![Gender and seniority in email, internet and social media scams]({{'/assets/postImages/post2/MethodComparison.png' | relative_url}})
 *Figure 7: Comparison of gender and seniority status for email, internet, and social media scams.*
 
 A breakdown of methodologies shows that some methods are gendered, but there are more pronounced differences between seniors and non-seniors. The seniority difference is stark in that seniors are scammed fewer times online, but they lose a substantially larger amount per scam. This suggests that these seniors are more susceptible to scams over these mediums, and non-seniors are more accessible over these mediums.

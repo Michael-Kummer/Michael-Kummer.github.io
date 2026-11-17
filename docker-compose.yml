@@ -1,0 +1,17 @@
+services:
+  site:
+    image: ruby:3.2
+    working_dir: /srv
+    command: >
+      bash -c "git config --global --add safe.directory /srv
+      && bundle install
+      && bundle exec jekyll serve -H 0.0.0.0 -d /tmp/out --livereload"
+    ports:
+      - "4000:4000"
+      - "35729:35729"
+    volumes:
+      - .:/srv
+      - bundle:/usr/local/bundle
+
+volumes:
+  bundle:

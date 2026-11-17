@@ -4,6 +4,8 @@
 
 Jekyll::Hooks.register :posts, :post_init do |post|
 
+  next if post.data.key?('last_modified_at') # front matter wins
+
   commit_num = `git rev-list --count HEAD "#{ post.path }"`
 
   if commit_num.to_i > 1

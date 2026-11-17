@@ -1,7 +1,9 @@
 ---
 layout: post
 title: Senior vs Non-Senior Volunteerism In Alberta
+description: Volunteer barriers and motivations of seniors vs non-seniors in Alberta.
 date: '2024-12-31 16:22:20 -0700'
+last_modified_at: 2025-05-01
 math: True
 ---
 
@@ -81,41 +83,13 @@ Our hypothesis for this analysis is whether there is a substantial difference be
 ## Key Findings
 
 ##### Figure 1: Who is Volunteering?
-![[Hours Volunteered.png]]({{'/assets/postImages/post1/Hours-Volunteered.png' | relative_url}})
+![Hours volunteered per month by age group]({{'/assets/postImages/post1/Hours-Volunteered.png' | relative_url}})
 *Note: the 18-24 range cannot be used to predict or determine anything about their volunteering rates*
 As expected, senior individuals volunteer the most hours per month. The older an individual becomes, the longer they will spend volunteering. Younger groups, such as 25 to 34-year-olds, volunteer the fewest hours per month, which is to be expected as individuals under 55 will have less time than those who are retired.
 
 ##### Figure 2: What do Different Age Groups Value?
 
-<div class="bokeh-container">
-  <iframe src="{{ '/assets/postImages/post1/VolunteerPreferencesBokeh.html' | relative_url }}"
-          style="width: 100%; height: 700px; border: none;"
-          scrolling="no"
-          onload="this.contentWindow.document.body.style.overflow='hidden'"></iframe>
-</div>
-<style>
-.bokeh-container {
-  width: 100%;
-  max-width: 100%;  /* Allow full width */
-  margin: 0 auto;
-  margin-bottom: 50px;
-  height: 500px;  /* Increased height to give more space */
-  position: relative;
-  overflow: hidden;
-}
-.bokeh-container iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  transform-origin: 0 0;  /* Add this */
-}
-/* For mobile screens */
-@media (max-width: 768px) {
-  .bokeh-container {
-    height: 600px;
-  }
-}
-</style>
+{% include chart.html src="/assets/postImages/post1/VolunteerPreferencesBokeh.html" height=550 title="Volunteer preferences by age group" %}
 *Note: This plot is entirely interactive.*
 
 1) In the past, I have found younger individuals to want to volunteer at places they would eventually like to work at. These younger individuals also want more opportunities to grow their respective skill sets. Individuals under 55 align with this experience, as most would see increased appeal through skill-focused volunteering. 
@@ -124,28 +98,7 @@ As expected, senior individuals volunteer the most hours per month. The older an
 
 ##### Figure 3: Volunteerism by Area
 
-<div class="plotly-container">
-  <iframe src="{{ '/assets/postImages/post1/ParticipationByArea.html' | relative_url }}"
-          style="width: 100%; height: 600px; border: none;"
-          scrolling="no"></iframe>
-</div>
-
-<style>
-.plotly-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  padding-bottom: 20px;
-}
-
-/* For mobile screens, adjust height */
-@media (max-width: 768px) {
-  .plotly-container iframe {
-    height: 450px;
-  }
-}
-</style>
+{% include chart.html src="/assets/postImages/post1/ParticipationByArea.html" height=600 title="Volunteer participation by area" %}
 
 
 ## Statistical Analysis: Seniors vs. Non-Seniors

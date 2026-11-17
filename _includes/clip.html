@@ -1,0 +1,35 @@
+{% comment %}
+  A video in a post. Poster: the same path with .jpg.
+  loop=true   -> silent, plays and loops on its own (an animation).
+  play=true  -> a large play button over the poster; plays with sound. The button comes back
+                when the clip is paused or finished.
+  class="light" / "dark" -> shown only in that colour mode.
+{% endcomment %}
+{% assign poster = include.src | replace: '.mp4', '.jpg' %}
+<div class="clip {{ include.class }}">
+  <video src="{{ include.src | relative_url }}" poster="{{ poster | relative_url }}" playsinline aria-label="{{ include.title }}"
+    {% if include.loop %}autoplay muted loop preload="auto"{% else %}preload="none"{% endif %}></video>
+  {% if include.play %}
+  <button type="button" class="clip__play" aria-label="Play with sound">
+    <span class="clip__icon" aria-hidden="true"></span>
+    <span>Play with sound</span>
+  </button>
+  {% endif %}
+</div>
+{% if include.play %}
+<script>
+  (() => {
+    const clip = document.currentScript.previousElementSibling;
+    const video = clip.querySelector('video');
+    const show = (on) => clip.classList.toggle('is-playing', !on);
+    clip.querySelector('.clip__play').addEventListener('click', () => video.play());
+    video.addEventListener('click', () => (video.paused ? video.play() : video.pause()));
+    video.addEventListener('play', () => show(false));
+    video.addEventListener('pause', () => show(true));
+    video.addEventListener('ended', () => {
+      video.load(); // back to the poster
+      show(true);
+    });
+  })();
+</script>
+{% endif %}
